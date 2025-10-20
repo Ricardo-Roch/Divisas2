@@ -190,66 +190,67 @@ struct IdentificadorView: View {
                     Text("\(detectedLabel)\n\nConfianza: \(String(format: "%.1f", confidence * 100))%")
                         .multilineTextAlignment(.center)
                         .padding(.bottom, 4)
-                    
                     Button {
-                        // Cierre inmediato y limpieza mínima (sin tocar cámara ni modelos)
-                        let wasIdentified = confidence >= confianzaMinima
-                        let code = detectedDenominationCode
-                        withAnimation(.easeOut(duration: 0.15)) {
-                            showAlert = false
-                        }
-                        detectedLabel = ""
-                        confidence = 0.0
-                        detectedDenominationCode = nil
-                        if wasIdentified, let code = code {
-                            // Determinar tipo (moneda o billete) según el sufijo del código
-                            let type = code.hasSuffix("b") ? .bill : .coin
-                            // Preparar valores para CurrencyItem
-                            let valueStr: String
-                            let displayName: String
-                            if code.hasSuffix("b") {
-                                // Billete: valor en pesos
-                                let valorNum = String(code.dropLast())  // ej: "500b" -> "500"
-                                valueStr = valorNum
-                                displayName = "Billete de \(valorNum) pesos mexicanos"
-                            } else if code.hasSuffix("c") {
-                                // Moneda en centavos
-                                let centavosNum = String(code.dropLast())  // ej: "10c" -> "10"
-                                valueStr = "0.\(centavosNum)"              // "10" -> "0.10"
-                                displayName = "Moneda de \(centavosNum) centavos mexicanos"
-                            } else {
-                                // Moneda en pesos
-                                let pesosNum = String(code.dropLast())     // ej: "5p" -> "5"
-                                valueStr = pesosNum
-                                if pesosNum == "1" {
-                                    displayName = "Moneda de 1 peso mexicano"
-                                } else {
-                                    displayName = "Moneda de \(pesosNum) pesos mexicanos"
-                                }
-                            }
-                            // Elegir ícono según tipo
-                            let iconName = type == .bill ? "banknote.fill" : "bitcoinsign.circle.fill"
-                            // Crear el CurrencyItem seleccionado
-                            selectedCurrencyItem = MexCurrencySearchView.CurrencyItem(
-                                type: type,
-                                value: valueStr,
-                                displayName: displayName,
-                                icon: iconName
-                            )
-                            navigateToDetail = true  // Activar navegación al detalle
-                        }
-                    // (No reiniciamos sesión ni hacemos trabajo pesado aquí)
-                    } label: {
-                        Text("OK")
-                            .font(.system(size: 16, weight: .semibold))
-                            .padding(.vertical, 10)
-                            .padding(.horizontal, 24)
-                            .background(
-                                Capsule().fill(Color.white.opacity(0.15))
-                            )
-                    }
-                    .buttonStyle(.plain)
-                    .foregroundColor(.white)
+                                            // Cierre inmediato y limpieza mínima (sin tocar cámara ni modelos)
+                                            let wasIdentified = confidence >= confianzaMinima
+                                            let code = detectedDenominationCode
+
+                                            withAnimation(.easeOut(duration: 0.15)) {
+                                                showAlert = false
+                                            }
+                                            detectedLabel = ""
+                                            confidence = 0.0
+                                            detectedDenominationCode = nil
+
+                                            guard wasIdentified, let code = code else { return }
+
+                                            // 1) Derivar valueStr y displayName según el código detectado
+                                            let valueStr: String
+                                            let displayName: String
+
+                                            if code.hasSuffix("b") {
+                                                // Billete: valor en pesos
+                                                let valorNum = String(code.dropLast())     // "500b" -> "500"
+                                                valueStr = valorNum
+                                                displayName = "Billete de \(valorNum) pesos mexicanos"
+                                            } else if code.hasSuffix("c") {
+                                                // Moneda en centavos
+                                                let centavosNum = String(code.dropLast())  // "10c" -> "10"
+                                                // Si quieres dos dígitos siempre, usa String(format:) en vez de la línea siguiente
+                                                valueStr = "0.\(centavosNum)"              // "10" -> "0.10"
+                                                displayName = "Moneda de \(centavosNum) centavos mexicanos"
+                                            } else {
+                                                // Moneda en pesos
+                                                let pesosNum = String(code.dropLast())     // "5p" -> "5"
+                                                valueStr = pesosNum
+                                                displayName = (pesosNum == "1")
+                                                    ? "Moneda de 1 peso mexicano"
+                                                    : "Moneda de \(pesosNum) pesos mexicanos"
+                                            }
+
+                                            // 2) Ícono y tipo (aquí el contexto de 'type:' resuelve .bill/.coin sin ambigüedad)
+                                            let iconName = code.hasSuffix("b") ? "banknote.fill" : "bitcoinsign.circle.fill"
+
+                                            selectedCurrencyItem = MexCurrencySearchView.CurrencyItem(
+                                                type: code.hasSuffix("b") ? .bill : .coin,
+                                                value: valueStr,
+                                                displayName: displayName,
+                                                icon: iconName
+                                            )
+
+                                            // 3) Disparar la navegación a MexicanCoinDetailView
+                                            navigateToDetail = true
+                                        } label: {
+                                            Text("OK")
+                                                .font(.system(size: 16, weight: .semibold))
+                                                .padding(.vertical, 10)
+                                                .padding(.horizontal, 24)
+                                                .background(
+                                                    Capsule().fill(Color.white.opacity(0.15))
+                                                )
+                                        }
+                                        .buttonStyle(.plain)
+                                        .foregroundColor(.white)
                 }
                 .padding(20)
                 .background(
@@ -263,14 +264,16 @@ struct IdentificadorView: View {
                 .animation(.easeInOut(duration: 0.2), value: showAlert)
             }
             NavigationLink(
-                destination: {
+                destination: Group {
                     if let item = selectedCurrencyItem {
                         MexicanCoinDetailView(item: item)
+                    } else {
+                        EmptyView()
                     }
                 },
                 isActive: $navigateToDetail
             ) {
-                EmptyView()  // Enlace sin contenido visible
+                EmptyView()
             }
             .hidden()
         }
