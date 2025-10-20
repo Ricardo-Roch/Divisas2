@@ -16,9 +16,9 @@ enum AppColorScheme: String, CaseIterable {
     
     var localizedKey: String {
         switch self {
-        case .light: return "Claro"
-        case .dark: return "Oscuro"
-        case .system: return "Sistema"
+        case .light: return "light"
+        case .dark: return "dark"
+        case .system: return "system"
         }
     }
     
@@ -45,6 +45,7 @@ struct SettingsView: View {
     @AppStorage("notificationsEnabled") private var notificationsEnabled = false
     @AppStorage("lastKnownRate") private var lastKnownRate: Double = 0.0
     
+    @ObservedObject private var localizationManager = LocalizationManager3.shared
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) private var dismiss
     
@@ -52,6 +53,7 @@ struct SettingsView: View {
     @State private var notificationPermissionDenied = false
     @State private var currentRate: Double = 0.0
     @State private var isLoadingRate = false
+    @State private var showLanguagePicker = false
     
     var body: some View {
         ZStack {
@@ -79,7 +81,7 @@ struct SettingsView: View {
                     
                     Spacer()
                     
-                    Text("Configuración")
+                    Text("settings".localized())
                         .font(.system(size: 18, weight: .semibold, design: .rounded))
                         .foregroundColor(.appTextPrimary)
                     
@@ -94,16 +96,62 @@ struct SettingsView: View {
                 
                 // Contenido
                 Form {
+                    // SECCIÓN: Idioma
+                    Section {
+                        VStack(alignment: .leading, spacing: 12) {
+                            HStack {
+                                Image(systemName: "globe")
+                                    .foregroundColor(.blue)
+                                    .font(.title3)
+                                
+                                Text("language".localized())
+                                    .font(.subheadline.weight(.semibold))
+                                    .foregroundColor(.appTextPrimary)
+                                
+                                Spacer()
+                                
+                                Button {
+                                    showLanguagePicker = true
+                                } label: {
+                                    HStack(spacing: 8) {
+                                        Text(localizationManager.currentLanguage.flag)
+                                            .font(.title3)
+                                        Text(localizationManager.currentLanguage.displayName)
+                                            .font(.subheadline)
+                                            .foregroundColor(.appTextSecondary)
+                                        Image(systemName: "chevron.right")
+                                            .font(.caption.weight(.semibold))
+                                            .foregroundColor(.appTextSecondary)
+                                    }
+                                }
+                                .buttonStyle(.plain)
+                            }
+                            
+                            Text("language_desc".localized())
+                                .font(.footnote)
+                                .foregroundColor(.appTextSecondary)
+                        }
+                        .padding(.vertical, 8)
+                    }
+                    .listRowBackground(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(.ultraThinMaterial)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Color.appTextPrimary.opacity(0.1), lineWidth: 1)
+                            )
+                    )
+                    
                     // Sección de Apariencia
                     Section {
                         VStack(alignment: .leading, spacing: 12) {
-                            Text("Apariencia")
+                            Text("appearance".localized())
                                 .font(.subheadline.weight(.semibold))
                                 .foregroundColor(.appTextPrimary)
                             
                             AppearanceSelector(selection: $appColorScheme)
                             
-                            Text("Elige cómo quieres ver la aplicación. El modo Sistema se adapta a la configuración de tu dispositivo.")
+                            Text("appearance_desc".localized())
                                 .font(.footnote)
                                 .foregroundColor(.appTextSecondary)
                         }
@@ -126,7 +174,7 @@ struct SettingsView: View {
                                     .foregroundColor(.blue)
                                     .font(.title3)
                                 
-                                Text("Notificaciones de Tipo de Cambio")
+                                Text("notifications".localized())
                                     .font(.subheadline.weight(.semibold))
                                     .foregroundColor(.appTextPrimary)
                                 
@@ -145,7 +193,7 @@ struct SettingsView: View {
                                         Image(systemName: "clock.fill")
                                             .foregroundColor(.green)
                                             .font(.caption)
-                                        Text("Notificación cada hora")
+                                        Text("hourly_notification".localized())
                                             .font(.caption)
                                             .foregroundColor(.appTextSecondary)
                                     }
@@ -154,7 +202,7 @@ struct SettingsView: View {
                                         Image(systemName: "chart.line.uptrend.xyaxis")
                                             .foregroundColor(.orange)
                                             .font(.caption)
-                                        Text("Alerta con cambios mayores al 1%")
+                                        Text("change_alert".localized())
                                             .font(.caption)
                                             .foregroundColor(.appTextSecondary)
                                     }
@@ -164,7 +212,7 @@ struct SettingsView: View {
                                             Image(systemName: "dollarsign.circle.fill")
                                                 .foregroundColor(.blue)
                                                 .font(.caption)
-                                            Text("Tipo de cambio actual: $\(String(format: "%.2f", currentRate)) MXN")
+                                            Text("\("current_rate".localized()): $\(String(format: "%.2f", currentRate)) MXN")
                                                 .font(.caption.weight(.medium))
                                                 .foregroundColor(.appTextPrimary)
                                         }
@@ -175,8 +223,8 @@ struct SettingsView: View {
                             }
                             
                             Text(notificationsEnabled ?
-                                "Recibirás notificaciones cada hora con el tipo de cambio USD/MXN actualizado." :
-                                "Activa las notificaciones para recibir actualizaciones del tipo de cambio.")
+                                "notification_enabled_desc".localized() :
+                                "notification_disabled_desc".localized())
                                 .font(.footnote)
                                 .foregroundColor(.appTextSecondary)
                         }
@@ -195,17 +243,20 @@ struct SettingsView: View {
             }
         }
         .navigationBarHidden(true)
-        .alert("Permiso de Notificaciones", isPresented: $notificationPermissionDenied) {
-            Button("Abrir Ajustes") {
+        .sheet(isPresented: $showLanguagePicker) {
+            LanguagePickerView(selectedLanguage: $localizationManager.currentLanguage)
+        }
+        .alert("notification_permission".localized(), isPresented: $notificationPermissionDenied) {
+            Button("open_settings".localized()) {
                 if let url = URL(string: UIApplication.openSettingsURLString) {
                     UIApplication.shared.open(url)
                 }
             }
-            Button("Cancelar", role: .cancel) {
+            Button("cancel".localized(), role: .cancel) {
                 notificationsEnabled = false
             }
         } message: {
-            Text("Para recibir notificaciones del tipo de cambio, necesitas habilitar los permisos en Ajustes.")
+            Text("notification_permission_desc".localized())
         }
         .onAppear {
             if notificationsEnabled {
@@ -257,7 +308,6 @@ struct SettingsView: View {
                     if let rate = result.rates["MXN"] {
                         currentRate = rate
                         
-                        // Guardar última tasa conocida
                         if lastKnownRate == 0 {
                             lastKnownRate = rate
                         }
@@ -273,12 +323,10 @@ struct SettingsView: View {
         let center = UNUserNotificationCenter.current()
         center.removeAllPendingNotificationRequests()
         
-        // Notificación cada hora
         let content = UNMutableNotificationContent()
         content.title = "Tipo de Cambio USD/MXN"
         content.sound = .default
         
-        // Trigger cada hora
         var dateComponents = DateComponents()
         dateComponents.minute = 0
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
@@ -295,12 +343,10 @@ struct SettingsView: View {
             }
         }
         
-        // Programar actualización inmediata
         scheduleImmediateRateCheck()
     }
     
     private func scheduleImmediateRateCheck() {
-        // Usar Background Tasks o timer para verificar la tasa
         Timer.scheduledTimer(withTimeInterval: 3600, repeats: true) { _ in
             checkRateAndNotify()
         }
@@ -333,7 +379,6 @@ struct SettingsView: View {
         content.body = "1 USD = $\(String(format: "%.2f", rate)) MXN"
         content.sound = .default
         
-        // Calcular cambio porcentual
         if lastKnownRate > 0 {
             let percentChange = ((rate - lastKnownRate) / lastKnownRate) * 100
             
@@ -358,6 +403,67 @@ struct SettingsView: View {
     }
 }
 
+// MARK: - Language Picker View
+struct LanguagePickerView: View {
+    @Binding var selectedLanguage: AppLanguage
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) private var colorScheme
+    
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                Color.appBackground
+                    .ignoresSafeArea()
+                
+                List(AppLanguage.allCases, id: \.self) { language in
+                    Button {
+                        withAnimation {
+                            selectedLanguage = language
+                        }
+                        // Pequeño delay para que el usuario vea la selección
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            dismiss()
+                        }
+                    } label: {
+                        HStack(spacing: 12) {
+                            Text(language.flag)
+                                .font(.system(size: 32))
+                            
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(language.displayName)
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .foregroundColor(.appTextPrimary)
+                            }
+                            
+                            Spacer()
+                            
+                            if language == selectedLanguage {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.blue)
+                                    .font(.system(size: 20, weight: .semibold))
+                            }
+                        }
+                        .padding(.vertical, 8)
+                    }
+                    .buttonStyle(.plain)
+                    .listRowBackground(Color.appCardBackground)
+                }
+                .scrollContentBackground(.hidden)
+            }
+            .navigationTitle("language".localized())
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("close".localized()) {
+                        dismiss()
+                    }
+                    .foregroundColor(.appTextPrimary)
+                }
+            }
+        }
+    }
+}
+
 // MARK: - Selector de Apariencia
 private struct AppearanceSelector: View {
     @Binding var selection: AppColorScheme
@@ -374,7 +480,7 @@ private struct AppearanceSelector: View {
                     HStack(spacing: 8) {
                         Image(systemName: scheme.icon)
                             .imageScale(.medium)
-                        Text(scheme.localizedKey)
+                        Text(scheme.localizedKey.localized())
                             .font(.subheadline.weight(.semibold))
                     }
                     .foregroundColor(foregroundColor(for: scheme))

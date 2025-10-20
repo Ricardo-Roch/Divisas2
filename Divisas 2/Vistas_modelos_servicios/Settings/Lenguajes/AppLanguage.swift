@@ -5,6 +5,7 @@
 //  Created by Ricardo Rocha Moreno on 19/10/25.
 //
 
+
 import SwiftUI
 import Combine
 
@@ -53,6 +54,7 @@ class LocalizationManager3: ObservableObject {
     @Published var currentLanguage: AppLanguage {
         didSet {
             UserDefaults.standard.set(currentLanguage.rawValue, forKey: "app_language")
+            objectWillChange.send()
         }
     }
     
@@ -70,17 +72,9 @@ class LocalizationManager3: ObservableObject {
 struct LocalizedStrings {
     static func get(_ key: String, language: AppLanguage) -> String {
         let translations: [String: [AppLanguage: String]] = [
-            // HomeView
-            "app_name": [
-                .spanish: "Moneta",
-                .english: "Moneta",
-                .french: "Moneta",
-                .portuguese: "Moneta",
-                .german: "Moneta",
-                .italian: "Moneta",
-                .chinese: "Moneta",
-                .japanese: "Moneta"
-            ],
+            // MARK: - HomeView
+            "app_name": universalTranslation("Moneta"),
+            
             "scanner_title": [
                 .spanish: "Escáner",
                 .english: "Scanner",
@@ -172,7 +166,7 @@ struct LocalizedStrings {
                 .japanese: "通貨間"
             ],
             
-            // SettingsView
+            // MARK: - SettingsView
             "settings": [
                 .spanish: "Configuración",
                 .english: "Settings",
@@ -352,10 +346,199 @@ struct LocalizedStrings {
                 .italian: "Annulla",
                 .chinese: "取消",
                 .japanese: "キャンセル"
+            ],
+            
+            // MARK: - CurrencyConverterView
+            "converter_title": [
+                .spanish: "Conversor",
+                .english: "Converter",
+                .french: "Convertisseur",
+                .portuguese: "Conversor",
+                .german: "Umrechner",
+                .italian: "Convertitore",
+                .chinese: "转换器",
+                .japanese: "コンバーター"
+            ],
+            "history": [
+                .spanish: "Historial",
+                .english: "History",
+                .french: "Historique",
+                .portuguese: "Histórico",
+                .german: "Verlauf",
+                .italian: "Cronologia",
+                .chinese: "历史",
+                .japanese: "履歴"
+            ],
+            "select_currency": [
+                .spanish: "Seleccionar moneda",
+                .english: "Select currency",
+                .french: "Sélectionner la devise",
+                .portuguese: "Selecionar moeda",
+                .german: "Währung auswählen",
+                .italian: "Seleziona valuta",
+                .chinese: "选择货币",
+                .japanese: "通貨を選択"
+            ],
+            "search_currency": [
+                .spanish: "Buscar moneda",
+                .english: "Search currency",
+                .french: "Rechercher une devise",
+                .portuguese: "Buscar moeda",
+                .german: "Währung suchen",
+                .italian: "Cerca valuta",
+                .chinese: "搜索货币",
+                .japanese: "通貨を検索"
+            ],
+            "close": [
+                .spanish: "Cerrar",
+                .english: "Close",
+                .french: "Fermer",
+                .portuguese: "Fechar",
+                .german: "Schließen",
+                .italian: "Chiudi",
+                .chinese: "关闭",
+                .japanese: "閉じる"
+            ],
+            "no_history": [
+                .spanish: "Sin historial",
+                .english: "No history",
+                .french: "Pas d'historique",
+                .portuguese: "Sem histórico",
+                .german: "Kein Verlauf",
+                .italian: "Nessuna cronologia",
+                .chinese: "没有历史",
+                .japanese: "履歴なし"
+            ],
+            "conversions_appear_here": [
+                .spanish: "Tus conversiones aparecerán aquí",
+                .english: "Your conversions will appear here",
+                .french: "Vos conversions apparaîtront ici",
+                .portuguese: "Suas conversões aparecerão aqui",
+                .german: "Ihre Umrechnungen erscheinen hier",
+                .italian: "Le tue conversioni appariranno qui",
+                .chinese: "您的转换将显示在这里",
+                .japanese: "変換履歴がここに表示されます"
+            ],
+            "rate": [
+                .spanish: "Tasa",
+                .english: "Rate",
+                .french: "Taux",
+                .portuguese: "Taxa",
+                .german: "Kurs",
+                .italian: "Tasso",
+                .chinese: "汇率",
+                .japanese: "レート"
+            ],
+            
+            // MARK: - IdentificadorView
+            "detecting": [
+                .spanish: "Detectando",
+                .english: "Detecting",
+                .french: "Détection",
+                .portuguese: "Detectando",
+                .german: "Erkennung",
+                .italian: "Rilevamento",
+                .chinese: "检测中",
+                .japanese: "検出中"
+            ],
+            "bills": [
+                .spanish: "Billetes",
+                .english: "Bills",
+                .french: "Billets",
+                .portuguese: "Notas",
+                .german: "Banknoten",
+                .italian: "Banconote",
+                .chinese: "钞票",
+                .japanese: "紙幣"
+            ],
+            "coins": [
+                .spanish: "Monedas",
+                .english: "Coins",
+                .french: "Pièces",
+                .portuguese: "Moedas",
+                .german: "Münzen",
+                .italian: "Monete",
+                .chinese: "硬币",
+                .japanese: "コイン"
+            ],
+            "analyzing": [
+                .spanish: "Analizando",
+                .english: "Analyzing",
+                .french: "Analyse",
+                .portuguese: "Analisando",
+                .german: "Analysieren",
+                .italian: "Analizzando",
+                .chinese: "分析中",
+                .japanese: "分析中"
+            ],
+            "identified": [
+                .spanish: "✅ Identificado",
+                .english: "✅ Identified",
+                .french: "✅ Identifié",
+                .portuguese: "✅ Identificado",
+                .german: "✅ Identifiziert",
+                .italian: "✅ Identificato",
+                .chinese: "✅ 已识别",
+                .japanese: "✅ 識別されました"
+            ],
+            "low_confidence": [
+                .spanish: "⚠️ Confianza baja",
+                .english: "⚠️ Low confidence",
+                .french: "⚠️ Faible confiance",
+                .portuguese: "⚠️ Confiança baixa",
+                .german: "⚠️ Geringe Sicherheit",
+                .italian: "⚠️ Bassa confidenza",
+                .chinese: "⚠️ 置信度低",
+                .japanese: "⚠️ 信頼度が低い"
+            ],
+            "confidence": [
+                .spanish: "Confianza",
+                .english: "Confidence",
+                .french: "Confiance",
+                .portuguese: "Confiança",
+                .german: "Sicherheit",
+                .italian: "Confidenza",
+                .chinese: "置信度",
+                .japanese: "信頼度"
+            ],
+            "camera_permission_required": [
+                .spanish: "Permiso de Cámara Requerido",
+                .english: "Camera Permission Required",
+                .french: "Permission de caméra requise",
+                .portuguese: "Permissão de Câmera Necessária",
+                .german: "Kameraerlaubnis erforderlich",
+                .italian: "Permesso fotocamera richiesto",
+                .chinese: "需要相机权限",
+                .japanese: "カメラの許可が必要です"
+            ],
+            "camera_permission_desc": [
+                .spanish: "Esta app necesita acceso a la cámara para identificar billetes y monedas. Por favor, habilita el acceso en Ajustes.",
+                .english: "This app needs camera access to identify bills and coins. Please enable access in Settings.",
+                .french: "Cette application a besoin d'accéder à la caméra pour identifier les billets et les pièces. Veuillez activer l'accès dans Paramètres.",
+                .portuguese: "Este aplicativo precisa de acesso à câmera para identificar notas e moedas. Por favor, habilite o acesso nas Configurações.",
+                .german: "Diese App benötigt Kamerazugriff, um Banknoten und Münzen zu identifizieren. Bitte aktivieren Sie den Zugriff in den Einstellungen.",
+                .italian: "Questa app ha bisogno dell'accesso alla fotocamera per identificare banconote e monete. Abilita l'accesso nelle Impostazioni.",
+                .chinese: "此应用需要访问相机以识别钞票和硬币。请在设置中启用访问权限。",
+                .japanese: "このアプリは紙幣とコインを識別するためにカメラへのアクセスが必要です。設定でアクセスを有効にしてください。"
+            ],
+            "ok": [
+                .spanish: "OK",
+                .english: "OK",
+                .french: "OK",
+                .portuguese: "OK",
+                .german: "OK",
+                .italian: "OK",
+                .chinese: "确定",
+                .japanese: "OK"
             ]
         ]
         
         return translations[key]?[language] ?? key
+    }
+    
+    // Helper para traducciones universales (mismo texto en todos los idiomas)
+    private static func universalTranslation(_ text: String) -> [AppLanguage: String] {
+        return Dictionary(uniqueKeysWithValues: AppLanguage.allCases.map { ($0, text) })
     }
 }
 

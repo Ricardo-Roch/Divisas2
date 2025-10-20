@@ -11,7 +11,8 @@ struct HomeView: View {
     @State private var usdToMxnData: [DollarDataPoint] = []
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.verticalSizeClass) var verticalSizeClass
-    
+    @ObservedObject private var localizationManager = LocalizationManager3.shared // ← AGREGAR ESTO
+
     var isLandscape: Bool {
         verticalSizeClass == .compact
     }
@@ -87,23 +88,23 @@ struct HomeView: View {
         VStack(spacing: 16) {
             // Escáner
             NavigationLink(value: Route.identifier) {
-                ModuleCard(
-                    title: "Escáner",
-                    subtitle: "Identifica billetes y monedas",
-                    icon: "camera.fill",
-                    accentColor: Color(red: 0.95, green: 0.35, blue: 0.35),
-                    cta: "¡DESCÚBRELO AHORA!",
-                    minHeight: 140
-                )
-            }
-            .buttonStyle(.plain)
+                 ModuleCard(
+                     title: "scanner_title".localized(),
+                     subtitle: "scanner_subtitle".localized(),
+                     icon: "camera.fill",
+                     accentColor: Color(red: 0.95, green: 0.35, blue: 0.35),
+                     cta: "scanner_cta".localized(),
+                     minHeight: 140
+                 )
+             }
+             .buttonStyle(.plain)
             
             // Grid 2x2
             HStack(spacing: 16) {
                 NavigationLink(value: Route.nationalCurrency) {
                     ModuleCard(
-                        title: "Divisa Nacional",
-                        subtitle: "Conoce las monedas",
+                        title: "national_currency".localized(),
+                        subtitle: "know_currencies".localized(),
                         icon: "banknote.fill",
                         accentColor: Color(red: 0.65, green: 0.75, blue: 0.35),
                         minHeight: 140
@@ -113,23 +114,23 @@ struct HomeView: View {
                 .frame(maxWidth: .infinity)
                 
                 NavigationLink(value: Route.markets) {
-                    ModuleCard(
-                        title: "Cambia tu dinero",
-                        subtitle: "Todo lo que está cerca de ti",
-                        icon: "map.fill",
-                        accentColor: Color(red: 1.0, green: 0.85, blue: 0.15),
-                        minHeight: 140
-                    )
-                }
-                .buttonStyle(.plain)
-                .frame(maxWidth: .infinity)
+                       ModuleCard(
+                           title: "exchange_money".localized(),
+                           subtitle: "nearby_locations".localized(),
+                           icon: "map.fill",
+                           accentColor: Color(red: 1.0, green: 0.85, blue: 0.15),
+                           minHeight: 140
+                       )
+                   }
+                   .buttonStyle(.plain)
+                   .frame(maxWidth: .infinity)
             }
             
             // Conversor
             NavigationLink(value: Route.calculator) {
                 ConverterCard(
-                    title: "Convertidor",
-                    subtitle: "Entre monedas",
+                    title: "converter".localized(),
+                    subtitle: "between_currencies".localized(),
                     icon: "dollarsign.circle.fill",
                     accentColor: Color(red: 0.3, green: 0.55, blue: 0.85),
                     minHeight: 160
@@ -150,8 +151,8 @@ struct HomeView: View {
             VStack(spacing: 16) {
                 NavigationLink(value: Route.identifier) {
                     ModuleCard(
-                        title: "Escáner",
-                        subtitle: "Identifica billetes",
+                        title: "scanner_title".localized(),
+                        subtitle: "scanner_subtitle".localized(),
                         icon: "camera.fill",
                         accentColor: Color(red: 0.95, green: 0.35, blue: 0.35),
                         minHeight: 100
@@ -163,20 +164,20 @@ struct HomeView: View {
                 HStack(spacing: 16) {
                     NavigationLink(value: Route.nationalCurrency) {
                         ModuleCard(
-                            title: "Divisa",
-                            subtitle: "Conoce las monedas",
-                            icon: "banknote.fill",
-                            accentColor: Color(red: 0.65, green: 0.75, blue: 0.35),
-                            minHeight: 80
-                        )
+                                title: "national_currency".localized(),
+                                subtitle: "know_currencies".localized(),
+                                icon: "banknote.fill",
+                                accentColor: Color(red: 0.65, green: 0.75, blue: 0.35),
+                                minHeight: 80
+                            )
                     }
                     .buttonStyle(.plain)
                     .frame(maxWidth: .infinity)
                     
                     NavigationLink(value: Route.markets) {
                         ModuleCard(
-                            title: "Cambia",
-                            subtitle: "Ubicaciones",
+                            title: "exchange_money".localized(),
+                            subtitle: "nearby_locations".localized(),
                             icon: "map.fill",
                             accentColor: Color(red: 1.0, green: 0.85, blue: 0.15),
                             minHeight: 80
@@ -192,12 +193,12 @@ struct HomeView: View {
             // Columna derecha - Conversor
             NavigationLink(value: Route.calculator) {
                 ConverterCard(
-                    title: "Convertidor",
-                    subtitle: "Entre monedas",
-                    icon: "dollarsign.circle.fill",
-                    accentColor: Color(red: 0.3, green: 0.55, blue: 0.85),
-                    minHeight: 200
-                )
+                      title: "converter".localized(),
+                      subtitle: "between_currencies".localized(),
+                      icon: "dollarsign.circle.fill",
+                      accentColor: Color(red: 0.3, green: 0.55, blue: 0.85),
+                      minHeight: 200
+                  )
             }
             .buttonStyle(.plain)
             .frame(maxWidth: .infinity, maxHeight: .infinity)

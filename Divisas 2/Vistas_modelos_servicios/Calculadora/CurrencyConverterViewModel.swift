@@ -305,7 +305,8 @@ struct ConversionHistoryView: View {
     let history: [ConversionRecord]
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
-    
+    @ObservedObject private var localizationManager = LocalizationManager3.shared // ← AGREGAR
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -318,11 +319,11 @@ struct ConversionHistoryView: View {
                             .font(.system(size: 60))
                             .foregroundColor(.appTextSecondary)
                         
-                        Text("Sin historial")
+                        Text("no_history".localized()) // ← CAMBIAR
                             .font(.headline)
                             .foregroundColor(.appTextPrimary)
                         
-                        Text("Tus conversiones aparecerán aquí")
+                        Text("conversions_appear_here".localized()) // ← CAMBIAR
                             .font(.subheadline)
                             .foregroundColor(.appTextSecondary)
                     }
@@ -351,7 +352,7 @@ struct ConversionHistoryView: View {
                             .foregroundColor(.appTextPrimary)
                             
                             HStack {
-                                Text("Tasa: \(String(format: "%.4f", record.rate))")
+                                Text("\("rate".localized()): \(String(format: "%.4f", record.rate))") // ← CAMBIAR
                                     .font(.caption)
                                     .foregroundColor(.appTextSecondary)
                                 
@@ -368,11 +369,11 @@ struct ConversionHistoryView: View {
                     .scrollContentBackground(.hidden)
                 }
             }
-            .navigationTitle("Historial")
+            .navigationTitle("history".localized()) // ← CAMBIAR
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Cerrar") {
+                    Button("close".localized()) { // ← CAMBIAR
                         dismiss()
                     }
                     .foregroundColor(.appTextPrimary)

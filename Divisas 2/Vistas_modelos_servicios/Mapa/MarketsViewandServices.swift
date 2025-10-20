@@ -281,11 +281,24 @@ class FinancialServicesViewModel: ObservableObject {
     }
     
     func formatDistance(_ distance: CLLocationDistance) -> String {
-        let convertedDistance = distance / 1000 * distanceUnit.factor
-        if convertedDistance < 1 {
-            return String(format: "%.0f m", distance)
+        let distanceInKm = distance / 1000
+        let convertedDistance = distanceInKm * distanceUnit.factor
+        
+        if distanceUnit == .miles {
+            // Convertir a pies si es menos de 0.1 millas
+            if convertedDistance < 0.1 {
+                let feet = distance * 3.28084
+                return String(format: "%.0f ft", feet)
+            } else {
+                return String(format: "%.1f %@", convertedDistance, distanceUnit.rawValue)
+            }
         } else {
-            return String(format: "%.1f %@", convertedDistance, distanceUnit.rawValue)
+            // Mostrar en metros si es menos de 1 km
+            if convertedDistance < 1 {
+                return String(format: "%.0f m", distance)
+            } else {
+                return String(format: "%.1f %@", convertedDistance, distanceUnit.rawValue)
+            }
         }
     }
     
@@ -304,13 +317,22 @@ struct MarketsView: View {
     @Environment(\.colorScheme) private var colorScheme
     
     var body: some View {
-        VStack(spacing: 0) {
-            headerView
-            Spacer(minLength: 4)
-            mapView
-            placesList
+        ZStack {
+            Color.appBackground
+                .ignoresSafeArea()
+            
+            VStack(spacing: 0) {
+                filterChipsView
+                    .padding(.top, 8)
+                    .padding(.bottom, 12)
+                
+                mapView
+                    .padding(.bottom, 12)
+                
+                placesList
+            }
         }
-        .navigationTitle("Financial Services")
+        .navigationTitle("Servicios Financieros")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -331,7 +353,6 @@ struct MarketsView: View {
                 viewModel.searchNearbyPlaces(userLocation: location, type: viewModel.selectedType)
             }
         }
-        .background(Color.appBackground) // fondo adaptativo
     }
     
     private var distanceButton: some View {
@@ -345,28 +366,23 @@ struct MarketsView: View {
                     .font(.caption.weight(.medium))
             }
             .foregroundStyle(Color.appTextPrimary)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 6)
-            .background(
-                Capsule().fill(Color.appCardBackground)
-            )
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
         }
         .buttonStyle(.plain)
     }
     
-    private var headerView: some View {
-        HStack {
-            Spacer(minLength: 0)
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 14) {
-                    ForEach(FinancialPlace.PlaceType.allCases, id: \.self) { type in
-                        GlassChip(
-                            isSelected: viewModel.selectedType == type,
-                            title: type.localizedName,
-                            systemImage: type.icon,
-                            accent: type.color,
-                            height: 36
-                        ) {
+    private var filterChipsView: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(FinancialPlace.PlaceType.allCases, id: \.self) { type in
+                    FilterChip(
+                        isSelected: viewModel.selectedType == type,
+                        title: type.localizedName,
+                        systemImage: type.icon,
+                        accent: type.color
+                    ) {
+                        withAnimation(.easeInOut(duration: 0.2)) {
                             viewModel.selectedType = viewModel.selectedType == type ? nil : type
                             if let location = locationManager.userLocation {
                                 viewModel.searchNearbyPlaces(userLocation: location, type: viewModel.selectedType)
@@ -374,79 +390,99 @@ struct MarketsView: View {
                         }
                     }
                 }
-                .padding(.vertical, 2)
             }
-            Spacer(minLength: 0)
+            .padding(.horizontal, 16)
         }
-        .padding(.horizontal)
-        .padding(.top, 6)
-        .padding(.bottom, 8)
-    }
-    
-    private func markerLabel(for index: Int) -> String {
-        index < 26 ? String(UnicodeScalar(65 + index)!) : String(index - 25)
     }
     
     private var mapView: some View {
         ZStack {
-            Map(coordinateRegion: $viewModel.region, showsUserLocation: true)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-                .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color.white.opacity(0.12), lineWidth: 1))
-                .shadow(color: .black.opacity(0.35), radius: 14, y: 8)
+            Map(
+                coordinateRegion: $viewModel.region,
+                showsUserLocation: true,
+                annotationItems: Array(viewModel.filteredPlaces.prefix(15))
+            ) { place in
+                MapAnnotation(coordinate: place.coordinate) {
+                    PlaceMarkerView(place: place)
+                }
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(Color.appTextPrimary.opacity(0.1), lineWidth: 1)
+            )
             
             VStack {
                 Spacer()
                 HStack {
                     Spacer()
-                    GlassCircleButton(systemImage: "location.fill") {
+                    Button {
                         if let location = locationManager.userLocation {
                             viewModel.centerMapOnUserLocation(location, latitudinalMeters: 2000, longitudinalMeters: 2000)
                         } else {
                             locationManager.requestLocation()
                         }
+                    } label: {
+                        ZStack {
+                            Circle()
+                                .fill(.ultraThinMaterial)
+                                .overlay(
+                                    Circle()
+                                        .stroke(Color.white.opacity(0.25), lineWidth: 1)
+                                )
+                            
+                            Image(systemName: "location.fill")
+                                .font(.system(size: 18, weight: .semibold))
+                                .foregroundColor(.appTextPrimary)
+                        }
+                        .frame(width: 44, height: 44)
+                        .shadow(color: .black.opacity(0.3), radius: 8, y: 4)
                     }
+                    .buttonStyle(.plain)
                     .padding(12)
                 }
             }
         }
         .frame(height: 350)
-        .padding(.horizontal)
-        .padding(.top, 4)
+        .padding(.horizontal, 16)
     }
     
     private var placesList: some View {
-        ScrollView {
-            if viewModel.isLoading {
-                VStack(spacing: 16) {
-                    ProgressView()
-                        .scaleEffect(1.2)
-                    Text("Searching for places...")
-                        .font(.subheadline)
-                        .foregroundColor(.appTextSecondary)
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.top, 50)
-            } else if viewModel.filteredPlaces.isEmpty {
-                emptyStateView
-                    .padding(.top, 12)
-            } else {
-                LazyVStack(spacing: 16) {
-                    ForEach(Array(viewModel.filteredPlaces.enumerated()), id: \.element.id) { index, place in
-                        PlaceCardView(
-                            place: place,
-                            markerLabel: markerLabel(for: index),
-                            distance: viewModel.formatDistance(place.distance),
-                            onTap: { viewModel.openInMaps(place: place) }
-                        )
-                        .transition(.asymmetric(
-                            insertion: .move(edge: .trailing).combined(with: .opacity),
-                            removal: .move(edge: .leading).combined(with: .opacity)
-                        ))
+        GeometryReader { geometry in
+            ScrollView {
+                LazyVStack(spacing: 0) {
+                    if viewModel.isLoading {
+                        VStack(spacing: 16) {
+                            ProgressView()
+                                .scaleEffect(1.2)
+                            Text("Buscando lugares...")
+                                .font(.subheadline)
+                                .foregroundColor(.appTextSecondary)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: geometry.size.height)
+                    } else if viewModel.filteredPlaces.isEmpty {
+                        emptyStateView
+                            .frame(height: geometry.size.height)
+                    } else {
+                        VStack(spacing: 12) {
+                            ForEach(viewModel.filteredPlaces) { place in
+                                PlaceCardView(
+                                    place: place,
+                                    distance: viewModel.formatDistance(place.distance),
+                                    onTap: { viewModel.openInMaps(place: place) }
+                                )
+                                .transition(.asymmetric(
+                                    insertion: .move(edge: .trailing).combined(with: .opacity),
+                                    removal: .move(edge: .leading).combined(with: .opacity)
+                                ))
+                            }
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.top, 16)
+                        .padding(.bottom, 20)
                     }
                 }
-                .padding(.horizontal)
-                .padding(.top, 12)
-                .padding(.bottom, 20)
             }
         }
         .background(Color.appBackground)
@@ -457,10 +493,10 @@ struct MarketsView: View {
             Image(systemName: "mappin.slash")
                 .font(.system(size: 60))
                 .foregroundColor(.gray)
-            Text("No places found")
+            Text("No se encontraron lugares")
                 .font(.headline)
                 .foregroundColor(.appTextSecondary)
-            Text("Try a different location or enable location services.")
+            Text("Intenta con otra ubicación o habilita los servicios de localización.")
                 .font(.subheadline)
                 .foregroundColor(.appTextSecondary)
                 .multilineTextAlignment(.center)
@@ -468,13 +504,20 @@ struct MarketsView: View {
             
             if locationManager.authorizationStatus != .authorizedWhenInUse &&
                locationManager.authorizationStatus != .authorizedAlways {
-                Button("Enable Location") {
+                Button("Habilitar Ubicación") {
                     locationManager.requestLocation()
                 }
-                .padding()
-                .background(Color.appCardBackground)
                 .foregroundColor(.appTextPrimary)
-                .cornerRadius(10)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 12)
+                .background(
+                    Capsule()
+                        .fill(.ultraThinMaterial)
+                        .overlay(
+                            Capsule()
+                                .stroke(Color.appTextPrimary.opacity(0.2), lineWidth: 1)
+                        )
+                )
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -482,10 +525,90 @@ struct MarketsView: View {
     }
 }
 
+// MARK: - Place Marker View
+struct PlaceMarkerView: View {
+    let place: FinancialPlace
+    @State private var showTooltip = false
+    @Environment(\.colorScheme) private var colorScheme
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            // Tooltip
+            if showTooltip {
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack(spacing: 6) {
+                        Image(systemName: place.type.icon)
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(place.type.color)
+                        
+                        Text(place.name)
+                            .font(.caption.weight(.semibold))
+                            .foregroundColor(.appTextPrimary)
+                            .lineLimit(2)
+                            .multilineTextAlignment(.leading)
+                    }
+                    
+                    Text(place.type.localizedName)
+                        .font(.system(size: 10, weight: .medium))
+                        .foregroundColor(.appTextSecondary)
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 8)
+                .frame(maxWidth: 160)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(.ultraThinMaterial)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(place.type.color.opacity(0.4), lineWidth: 1.5)
+                        )
+                        .shadow(color: .black.opacity(0.2), radius: 8, y: 2)
+                )
+                .padding(.bottom, 4)
+                .transition(.scale(scale: 0.8).combined(with: .opacity))
+            }
+            
+            // Marker
+            ZStack {
+                Circle()
+                    .fill(place.type.color.opacity(0.25))
+                    .frame(width: 36, height: 36)
+                
+                Circle()
+                    .fill(.ultraThinMaterial)
+                    .frame(width: 32, height: 32)
+                    .overlay(
+                        Circle()
+                            .stroke(place.type.color, lineWidth: 2.5)
+                    )
+                
+                Image(systemName: place.type.icon)
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundColor(place.type.color)
+            }
+            .shadow(color: place.type.color.opacity(0.4), radius: 6, y: 2)
+        }
+        .fixedSize()
+        .onTapGesture {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                showTooltip.toggle()
+            }
+            
+            // Auto-hide después de 3 segundos
+            if showTooltip {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    withAnimation {
+                        showTooltip = false
+                    }
+                }
+            }
+        }
+    }
+}
+
 // MARK: - Place Card View
 struct PlaceCardView: View {
     let place: FinancialPlace
-    let markerLabel: String
     let distance: String
     let onTap: () -> Void
     @Environment(\.colorScheme) private var colorScheme
@@ -496,11 +619,15 @@ struct PlaceCardView: View {
                 ZStack {
                     Circle()
                         .fill(.ultraThinMaterial)
-                        .frame(width: 44, height: 44)
-                        .overlay(Circle().stroke(place.type.color.opacity(0.6), lineWidth: 1))
-                    Text(markerLabel)
-                        .font(.system(size: 20, weight: .bold))
-                        .foregroundColor(Color.appTextPrimary)
+                        .frame(width: 48, height: 48)
+                        .overlay(
+                            Circle()
+                                .stroke(place.type.color.opacity(0.5), lineWidth: 1.5)
+                        )
+                    
+                    Image(systemName: place.type.icon)
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundColor(place.type.color)
                 }
                 
                 VStack(alignment: .leading, spacing: 4) {
@@ -508,46 +635,54 @@ struct PlaceCardView: View {
                         .font(.body.weight(.medium))
                         .foregroundColor(.appTextPrimary)
                         .lineLimit(2)
-                    Text(place.type.localizedName)
-                        .font(.caption)
-                        .foregroundColor(.appTextSecondary)
+                        .multilineTextAlignment(.leading)
+                    
+                    HStack(spacing: 4) {
+                        Image(systemName: "mappin.circle.fill")
+                            .font(.caption2)
+                            .foregroundColor(place.type.color)
+                        Text(place.type.localizedName)
+                            .font(.caption)
+                            .foregroundColor(.appTextSecondary)
+                    }
                 }
                 
                 Spacer()
                 
-                HStack(spacing: 4) {
+                VStack(alignment: .trailing, spacing: 4) {
                     Text(distance)
                         .font(.subheadline.weight(.semibold))
                         .foregroundColor(.appTextPrimary)
+                    
                     Image(systemName: "chevron.right")
                         .font(.caption)
                         .foregroundColor(.appTextSecondary)
                 }
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 16)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 14)
             .background(
-                LiquidGlassBackground(accent: place.type.color, tintOpacity: 0.26)
-                    .clipShape(RoundedRectangle(cornerRadius: 22))
+                RoundedRectangle(cornerRadius: 14)
+                    .fill(.ultraThinMaterial)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 14)
+                            .stroke(place.type.color.opacity(0.3), lineWidth: 1)
+                    )
             )
-            .overlay(RoundedRectangle(cornerRadius: 22).stroke(place.type.color.opacity(0.45), lineWidth: 1))
         }
         .buttonStyle(.plain)
     }
 }
 
-// MARK: - GlassChip
-struct GlassChip: View {
+// MARK: - Filter Chip
+struct FilterChip: View {
     let isSelected: Bool
     let title: String
     let systemImage: String
     let accent: Color
-    var selectedTint: Double = 0.32
-    var normalTint: Double = 0.22
-    var height: CGFloat = 36
     let action: () -> Void
     
-    @GestureState private var isPressed = false
+    @Environment(\.colorScheme) private var colorScheme
     
     var body: some View {
         Button(action: action) {
@@ -555,75 +690,46 @@ struct GlassChip: View {
                 Image(systemName: systemImage)
                     .font(.system(size: 14, weight: .semibold))
                 Text(title)
-                    .font(.caption.weight(.medium))
+                    .font(.subheadline.weight(.semibold))
                     .lineLimit(1)
             }
-            .foregroundColor(.appTextPrimary)
-            .padding(.horizontal, 12)
-            .frame(height: height)
-            .background(
-                LiquidGlassBackground(
-                    accent: accent,
-                    tintOpacity: isSelected ? selectedTint : normalTint
-                )
-                .clipShape(Capsule())
+            .foregroundColor(foregroundColor)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+            .background(background)
+            .clipShape(Capsule())
+            .overlay(
+                Capsule()
+                    .stroke(borderColor, lineWidth: 1.5)
             )
-            .overlay(Capsule().stroke(accent.opacity(isSelected ? 0.65 : 0.35), lineWidth: 1))
-            .scaleEffect(isPressed ? 0.97 : 1.0)
-            .animation(.easeInOut(duration: 0.12), value: isPressed)
         }
         .buttonStyle(.plain)
-        .gesture(
-            DragGesture(minimumDistance: 0)
-                .updating($isPressed) { _, state, _ in state = true }
-        )
     }
-}
-
-// MARK: - LiquidGlassBackground
-struct LiquidGlassBackground: View {
-    var accent: Color
-    var tintOpacity: Double = 0.22
-    var shineOpacity: Double = 0.18
     
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(accent.opacity(tintOpacity))
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(.ultraThinMaterial)
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .stroke(
-                    LinearGradient(
-                        colors: [Color.white.opacity(0.35), Color.white.opacity(0.12)],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ),
-                    lineWidth: 1
-                )
+    private var background: some ShapeStyle {
+        if isSelected {
+            return AnyShapeStyle(colorScheme == .dark ?
+                Color.white.opacity(0.15) :
+                Color.white)
+        } else {
+            return AnyShapeStyle(.ultraThinMaterial)
         }
     }
-}
-
-// MARK: - GlassCircleButton
-struct GlassCircleButton: View {
-    let systemImage: String
-    let action: () -> Void
     
-    var body: some View {
-        Button(action: action) {
-            Image(systemName: systemImage)
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundColor(.appTextPrimary)
-                .frame(width: 44, height: 44)
-                .background(
-                    Circle()
-                        .fill(.ultraThinMaterial)
-                        .overlay(Circle().stroke(Color.white.opacity(0.25), lineWidth: 1))
-                )
-                .shadow(color: .black.opacity(0.5), radius: 8, y: 4)
+    private var borderColor: Color {
+        if isSelected {
+            return accent.opacity(0.6)
+        } else {
+            return Color.appTextPrimary.opacity(0.1)
         }
-        .buttonStyle(.plain)
+    }
+    
+    private var foregroundColor: Color {
+        if isSelected {
+            return accent
+        } else {
+            return .appTextPrimary.opacity(0.7)
+        }
     }
 }
 
@@ -631,6 +737,6 @@ struct GlassCircleButton: View {
 #Preview {
     NavigationStack {
         MarketsView()
-            .preferredColorScheme(.dark) // Solo preview, la app hereda el esquema global
+            .preferredColorScheme(.dark)
     }
 }

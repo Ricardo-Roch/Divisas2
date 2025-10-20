@@ -12,7 +12,8 @@ struct CurrencyConverterView: View {
     @State private var showingFromCurrencyPicker = false
     @State private var showingToCurrencyPicker = false
     @State private var showingHistory = false
-    
+    @ObservedObject private var localizationManager = LocalizationManager3.shared // ← AGREGAR
+
     var body: some View {
         ZStack {
             Color.appBackground
