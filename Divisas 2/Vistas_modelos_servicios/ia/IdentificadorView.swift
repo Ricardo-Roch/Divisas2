@@ -22,11 +22,13 @@ struct IdentificadorView: View {
     @State private var navigateToDetail = false
     @State private var detectedDenominationCode: String? = nil
     
+    // ✅ NUEVO: Estado para reiniciar la cámara
+    @State private var cameraKey = UUID()
+    
     private let modelos = ["Billetes", "Monedas"]
     private let confianzaMinima: Float = 0.75
     
     // Diccionario de etiquetas personalizadas
-    // Las claves coinciden con las denominaciones de los modelos
     private let etiquetasPersonalizadas: [String: String] = [
         // Billetes
         "20b": "💵 Billete de $20 pesos",
@@ -48,13 +50,13 @@ struct IdentificadorView: View {
     
     var body: some View {
         ZStack {
-            // Vista de la cámara
+            // ✅ Vista de la cámara con key para forzar recreación
             CameraView { pixelBuffer in
-                // no pisar el buffer mientras estás procesando
                 if !isDetecting {
                     self.currentBuffer = pixelBuffer
                 }
             }
+            .id(cameraKey) // ✅ Key para reiniciar la vista
             .edgesIgnoringSafeArea(.all)
             
             // Overlay oscuro durante la detección
@@ -97,7 +99,6 @@ struct IdentificadorView: View {
                             withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                                 selectedModelIndex = index
                             }
-                            // Haptic feedback al cambiar
                             let generator = UIImpactFeedbackGenerator(style: .light)
                             generator.impactOccurred()
                         }) {
@@ -138,18 +139,15 @@ struct IdentificadorView: View {
                     detectarObjeto()
                 }) {
                     ZStack {
-                        // Anillo exterior
                         Circle()
                             .stroke(Color.white, lineWidth: 5)
                             .frame(width: 80, height: 80)
                         
-                        // Botón interior
                         Circle()
                             .fill(isDetecting ? Color.gray : Color.white)
                             .frame(width: 68, height: 68)
                             .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 2)
                         
-                        // Indicador de procesamiento
                         if isDetecting {
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle(tint: .white))
@@ -181,7 +179,7 @@ struct IdentificadorView: View {
                 )
             }
             
-            // === NUEVO: Overlay (toast) no bloqueante con botón OK ===
+            // Overlay (toast) no bloqueante con botón OK
             if showAlert {
                 VStack(spacing: 12) {
                     Text(confidence >= confianzaMinima ? "✅ Identificado" : "⚠️ Confianza baja")
@@ -191,66 +189,58 @@ struct IdentificadorView: View {
                         .multilineTextAlignment(.center)
                         .padding(.bottom, 4)
                     Button {
-                                            // Cierre inmediato y limpieza mínima (sin tocar cámara ni modelos)
-                                            let wasIdentified = confidence >= confianzaMinima
-                                            let code = detectedDenominationCode
+                        let wasIdentified = confidence >= confianzaMinima
+                        let code = detectedDenominationCode
 
-                                            withAnimation(.easeOut(duration: 0.15)) {
-                                                showAlert = false
-                                            }
-                                            detectedLabel = ""
-                                            confidence = 0.0
-                                            detectedDenominationCode = nil
+                        withAnimation(.easeOut(duration: 0.15)) {
+                            showAlert = false
+                        }
+                        detectedLabel = ""
+                        confidence = 0.0
+                        detectedDenominationCode = nil
 
-                                            guard wasIdentified, let code = code else { return }
+                        guard wasIdentified, let code = code else { return }
 
-                                            // 1) Derivar valueStr y displayName según el código detectado
-                                            let valueStr: String
-                                            let displayName: String
+                        let valueStr: String
+                        let displayName: String
 
-                                            if code.hasSuffix("b") {
-                                                // Billete: valor en pesos
-                                                let valorNum = String(code.dropLast())     // "500b" -> "500"
-                                                valueStr = valorNum
-                                                displayName = "Billete de \(valorNum) pesos mexicanos"
-                                            } else if code.hasSuffix("c") {
-                                                // Moneda en centavos
-                                                let centavosNum = String(code.dropLast())  // "10c" -> "10"
-                                                // Si quieres dos dígitos siempre, usa String(format:) en vez de la línea siguiente
-                                                valueStr = "0.\(centavosNum)"              // "10" -> "0.10"
-                                                displayName = "Moneda de \(centavosNum) centavos mexicanos"
-                                            } else {
-                                                // Moneda en pesos
-                                                let pesosNum = String(code.dropLast())     // "5p" -> "5"
-                                                valueStr = pesosNum
-                                                displayName = (pesosNum == "1")
-                                                    ? "Moneda de 1 peso mexicano"
-                                                    : "Moneda de \(pesosNum) pesos mexicanos"
-                                            }
+                        if code.hasSuffix("b") {
+                            let valorNum = String(code.dropLast())
+                            valueStr = valorNum
+                            displayName = "Billete de \(valorNum) pesos mexicanos"
+                        } else if code.hasSuffix("c") {
+                            let centavosNum = String(code.dropLast())
+                            valueStr = "0.\(centavosNum)"
+                            displayName = "Moneda de \(centavosNum) centavos mexicanos"
+                        } else {
+                            let pesosNum = String(code.dropLast())
+                            valueStr = pesosNum
+                            displayName = (pesosNum == "1")
+                                ? "Moneda de 1 peso mexicano"
+                                : "Moneda de \(pesosNum) pesos mexicanos"
+                        }
 
-                                            // 2) Ícono y tipo (aquí el contexto de 'type:' resuelve .bill/.coin sin ambigüedad)
-                                            let iconName = code.hasSuffix("b") ? "banknote.fill" : "bitcoinsign.circle.fill"
+                        let iconName = code.hasSuffix("b") ? "banknote.fill" : "bitcoinsign.circle.fill"
 
-                                            selectedCurrencyItem = MexCurrencySearchView.CurrencyItem(
-                                                type: code.hasSuffix("b") ? .bill : .coin,
-                                                value: valueStr,
-                                                displayName: displayName,
-                                                icon: iconName
-                                            )
+                        selectedCurrencyItem = MexCurrencySearchView.CurrencyItem(
+                            type: code.hasSuffix("b") ? .bill : .coin,
+                            value: valueStr,
+                            displayName: displayName,
+                            icon: iconName
+                        )
 
-                                            // 3) Disparar la navegación a MexicanCoinDetailView
-                                            navigateToDetail = true
-                                        } label: {
-                                            Text("OK")
-                                                .font(.system(size: 16, weight: .semibold))
-                                                .padding(.vertical, 10)
-                                                .padding(.horizontal, 24)
-                                                .background(
-                                                    Capsule().fill(Color.white.opacity(0.15))
-                                                )
-                                        }
-                                        .buttonStyle(.plain)
-                                        .foregroundColor(.white)
+                        navigateToDetail = true
+                    } label: {
+                        Text("OK")
+                            .font(.system(size: 16, weight: .semibold))
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 24)
+                            .background(
+                                Capsule().fill(Color.white.opacity(0.15))
+                            )
+                    }
+                    .buttonStyle(.plain)
+                    .foregroundColor(.white)
                 }
                 .padding(20)
                 .background(
@@ -263,6 +253,7 @@ struct IdentificadorView: View {
                 .transition(.opacity.combined(with: .scale))
                 .animation(.easeInOut(duration: 0.2), value: showAlert)
             }
+            
             NavigationLink(
                 destination: Group {
                     if let item = selectedCurrencyItem {
@@ -277,8 +268,6 @@ struct IdentificadorView: View {
             }
             .hidden()
         }
-        // Eliminamos la alerta modal de resultados para evitar bloqueo de UI
-        // (Se mantiene la alerta de permisos de cámara)
         .alert("Permiso de Cámara Requerido", isPresented: $showCameraPermissionAlert) {
             Button("Ir a Ajustes", role: .none) {
                 if let url = URL(string: UIApplication.openSettingsURLString) {
@@ -291,10 +280,39 @@ struct IdentificadorView: View {
         }
         .onAppear {
             verificarPermisosCamara()
+            // ✅ Reiniciar la cámara cuando la vista aparece
+            reiniciarCamara()
+        }
+        // ✅ NUEVO: Observar cuando volvemos de la navegación
+        .onChange(of: navigateToDetail) { isNavigating in
+            if !isNavigating {
+                // Cuando volvemos de la navegación, reiniciamos todo
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    reiniciarCamara()
+                    limpiarEstado()
+                }
+            }
         }
     }
     
     // MARK: - Funciones privadas
+    
+    // ✅ NUEVA: Función para reiniciar la cámara
+    private func reiniciarCamara() {
+        currentBuffer = nil
+        cameraKey = UUID() // Esto fuerza a recrear la CameraView
+        print("🔄 Cámara reiniciada")
+    }
+    
+    // ✅ NUEVA: Función para limpiar el estado
+    private func limpiarEstado() {
+        selectedCurrencyItem = nil
+        detectedLabel = ""
+        confidence = 0.0
+        detectedDenominationCode = nil
+        showAlert = false
+        isDetecting = false
+    }
     
     private func copyPixelBuffer(_ src: CVPixelBuffer) -> CVPixelBuffer? {
         let pixelFormat = CVPixelBufferGetPixelFormatType(src)
@@ -349,7 +367,6 @@ struct IdentificadorView: View {
     }
     
     private func detectarObjeto() {
-        // Si hay un resultado visible, ocultarlo antes de iniciar una nueva detección
         if showAlert {
             withAnimation(.easeOut(duration: 0.15)) {
                 showAlert = false
@@ -366,26 +383,21 @@ struct IdentificadorView: View {
 
         isDetecting = true
 
-        // 🔒 Copia del frame para Vision (mantengo tu implementación, sin afectar flujo)
         guard let _ = copyPixelBuffer(pixelBuffer) else {
             isDetecting = false
             return
         }
         
-        // Haptic feedback inicial
         let generator = UIImpactFeedbackGenerator(style: .medium)
         generator.impactOccurred()
         
-        // Determinar tipo según el selector
         let tipo: TipoMoneda = selectedModelIndex == 0 ? .billetes : .monedas
         
-        // Ejecutar clasificación (mantengo tu lógica tal cual)
         clasificador.classify(pixelBuffer: pixelBuffer, tipo: tipo) { denominacion, conf in
             DispatchQueue.main.async {
                 self.isDetecting = false
                 
                 guard let denominacion = denominacion, let conf = conf else {
-                    // Error en la clasificación
                     self.detectedLabel = "❌ Error al procesar la imagen"
                     self.confidence = 0.0
                     self.detectedDenominationCode = nil
@@ -399,23 +411,18 @@ struct IdentificadorView: View {
                     return
                 }
                 
-                // Procesar resultado
                 if conf >= self.confianzaMinima {
-                    // Identificación exitosa
                     self.detectedLabel = self.etiquetasPersonalizadas[denominacion] ?? denominacion.uppercased()
                     self.confidence = conf
-                    self.detectedDenominationCode = denominacion   // Guardar código (ej. "500b")
+                    self.detectedDenominationCode = denominacion
                     
-                    // Haptic feedback de éxito
                     let successGenerator = UINotificationFeedbackGenerator()
                     successGenerator.notificationOccurred(.success)
                 } else {
-                    // Confianza insuficiente
                     self.detectedLabel = "No se pudo identificar con suficiente confianza"
                     self.confidence = conf
-                    self.detectedDenominationCode = nil   // No identificado con confianza
+                    self.detectedDenominationCode = nil
                     
-                    // Haptic feedback de advertencia
                     let warningGenerator = UINotificationFeedbackGenerator()
                     warningGenerator.notificationOccurred(.warning)
                 }
