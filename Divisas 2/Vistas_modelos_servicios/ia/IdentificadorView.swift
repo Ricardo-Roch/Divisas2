@@ -18,9 +18,9 @@ struct IdentificadorView: View {
     @State private var selectedModelIndex = 0
     @State private var showCameraPermissionAlert = false
     
-    // NUEVO: Estados para navegación (solo estos 2 estados agregados)
+    @State private var selectedCurrencyItem: MexCurrencySearchView.CurrencyItem? = nil
     @State private var navigateToDetail = false
-    @State private var detectedItem: MexCurrencySearchView.CurrencyItem?
+    @State private var detectedDenominationCode: String? = nil
     
     private let modelos = ["Billetes", "Monedas"]
     private let confianzaMinima: Float = 0.75
@@ -181,10 +181,10 @@ struct IdentificadorView: View {
                 )
             }
             
-            // Overlay (toast) no bloqueante con botón OK (solo para confianza baja)
+            // === NUEVO: Overlay (toast) no bloqueante con botón OK ===
             if showAlert {
                 VStack(spacing: 12) {
-                    Text("⚠️ Confianza baja")
+                    Text(confidence >= confianzaMinima ? "✅ Identificado" : "⚠️ Confianza baja")
                         .font(.headline)
                         .multilineTextAlignment(.center)
                     Text("\(detectedLabel)\n\nConfianza: \(String(format: "%.1f", confidence * 100))%")
@@ -192,11 +192,53 @@ struct IdentificadorView: View {
                         .padding(.bottom, 4)
                     
                     Button {
+                        // Cierre inmediato y limpieza mínima (sin tocar cámara ni modelos)
+                        let wasIdentified = confidence >= confianzaMinima
+                        let code = detectedDenominationCode
                         withAnimation(.easeOut(duration: 0.15)) {
                             showAlert = false
                         }
                         detectedLabel = ""
                         confidence = 0.0
+                        detectedDenominationCode = nil
+                        if wasIdentified, let code = code {
+                            // Determinar tipo (moneda o billete) según el sufijo del código
+                            let type = code.hasSuffix("b") ? .bill : .coin
+                            // Preparar valores para CurrencyItem
+                            let valueStr: String
+                            let displayName: String
+                            if code.hasSuffix("b") {
+                                // Billete: valor en pesos
+                                let valorNum = String(code.dropLast())  // ej: "500b" -> "500"
+                                valueStr = valorNum
+                                displayName = "Billete de \(valorNum) pesos mexicanos"
+                            } else if code.hasSuffix("c") {
+                                // Moneda en centavos
+                                let centavosNum = String(code.dropLast())  // ej: "10c" -> "10"
+                                valueStr = "0.\(centavosNum)"              // "10" -> "0.10"
+                                displayName = "Moneda de \(centavosNum) centavos mexicanos"
+                            } else {
+                                // Moneda en pesos
+                                let pesosNum = String(code.dropLast())     // ej: "5p" -> "5"
+                                valueStr = pesosNum
+                                if pesosNum == "1" {
+                                    displayName = "Moneda de 1 peso mexicano"
+                                } else {
+                                    displayName = "Moneda de \(pesosNum) pesos mexicanos"
+                                }
+                            }
+                            // Elegir ícono según tipo
+                            let iconName = type == .bill ? "banknote.fill" : "bitcoinsign.circle.fill"
+                            // Crear el CurrencyItem seleccionado
+                            selectedCurrencyItem = MexCurrencySearchView.CurrencyItem(
+                                type: type,
+                                value: valueStr,
+                                displayName: displayName,
+                                icon: iconName
+                            )
+                            navigateToDetail = true  // Activar navegación al detalle
+                        }
+                    // (No reiniciamos sesión ni hacemos trabajo pesado aquí)
                     } label: {
                         Text("OK")
                             .font(.system(size: 16, weight: .semibold))
@@ -220,13 +262,20 @@ struct IdentificadorView: View {
                 .transition(.opacity.combined(with: .scale))
                 .animation(.easeInOut(duration: 0.2), value: showAlert)
             }
-        }
-        // NUEVO: NavigationDestination para navegar cuando se detecte correctamente
-        .navigationDestination(isPresented: $navigateToDetail) {
-            if let item = detectedItem {
-                MexicanCoinDetailView(item: item)
+            NavigationLink(
+                destination: {
+                    if let item = selectedCurrencyItem {
+                        MexicanCoinDetailView(item: item)
+                    }
+                },
+                isActive: $navigateToDetail
+            ) {
+                EmptyView()  // Enlace sin contenido visible
             }
+            .hidden()
         }
+        // Eliminamos la alerta modal de resultados para evitar bloqueo de UI
+        // (Se mantiene la alerta de permisos de cámara)
         .alert("Permiso de Cámara Requerido", isPresented: $showCameraPermissionAlert) {
             Button("Ir a Ajustes", role: .none) {
                 if let url = URL(string: UIApplication.openSettingsURLString) {
@@ -243,81 +292,6 @@ struct IdentificadorView: View {
     }
     
     // MARK: - Funciones privadas
-    
-    // NUEVA FUNCIÓN: Convierte denominación a CurrencyItem
-    private func createCurrencyItem(from denominacion: String) -> MexCurrencySearchView.CurrencyItem? {
-        let tipo: MexCurrencySearchView.CurrencyItem.CurrencyType
-        let valor: String
-        let nombre: String
-        
-        switch denominacion {
-        // Billetes
-        case "20b":
-            tipo = .bill
-            valor = "20"
-            nombre = "Billete de 20 pesos mexicanos"
-        case "50b":
-            tipo = .bill
-            valor = "50"
-            nombre = "Billete de 50 pesos mexicanos"
-        case "100b":
-            tipo = .bill
-            valor = "100"
-            nombre = "Billete de 100 pesos mexicanos"
-        case "200b":
-            tipo = .bill
-            valor = "200"
-            nombre = "Billete de 200 pesos mexicanos"
-        case "500b":
-            tipo = .bill
-            valor = "500"
-            nombre = "Billete de 500 pesos mexicanos"
-        case "1000b":
-            tipo = .bill
-            valor = "1000"
-            nombre = "Billete de 1,000 pesos mexicanos"
-            
-        // Monedas
-        case "10c":
-            tipo = .coin
-            valor = "0.10"
-            nombre = "Moneda de 10 centavos mexicanos"
-        case "50c":
-            tipo = .coin
-            valor = "0.50"
-            nombre = "Moneda de 50 centavos mexicanos"
-        case "1p":
-            tipo = .coin
-            valor = "1"
-            nombre = "Moneda de 1 peso mexicano"
-        case "2p":
-            tipo = .coin
-            valor = "2"
-            nombre = "Moneda de 2 pesos mexicanos"
-        case "5p":
-            tipo = .coin
-            valor = "5"
-            nombre = "Moneda de 5 pesos mexicanos"
-        case "10p":
-            tipo = .coin
-            valor = "10"
-            nombre = "Moneda de 10 pesos mexicanos"
-        case "20p":
-            tipo = .coin
-            valor = "20"
-            nombre = "Moneda de 20 pesos mexicanos"
-            
-        default:
-            return nil
-        }
-        
-        return MexCurrencySearchView.CurrencyItem(
-            type: tipo,
-            value: valor,
-            displayName: nombre,
-            icon: tipo == .bill ? "banknote" : "bitcoinsign.circle.fill"
-        )
-    }
     
     private func copyPixelBuffer(_ src: CVPixelBuffer) -> CVPixelBuffer? {
         let pixelFormat = CVPixelBufferGetPixelFormatType(src)
@@ -379,6 +353,7 @@ struct IdentificadorView: View {
             }
             detectedLabel = ""
             confidence = 0.0
+            detectedDenominationCode = nil
         }
         
         guard let pixelBuffer = currentBuffer, !isDetecting else {
@@ -388,7 +363,7 @@ struct IdentificadorView: View {
 
         isDetecting = true
 
-        // 🔒 Copia del frame para Vision
+        // 🔒 Copia del frame para Vision (mantengo tu implementación, sin afectar flujo)
         guard let _ = copyPixelBuffer(pixelBuffer) else {
             isDetecting = false
             return
@@ -401,7 +376,7 @@ struct IdentificadorView: View {
         // Determinar tipo según el selector
         let tipo: TipoMoneda = selectedModelIndex == 0 ? .billetes : .monedas
         
-        // Ejecutar clasificación
+        // Ejecutar clasificación (mantengo tu lógica tal cual)
         clasificador.classify(pixelBuffer: pixelBuffer, tipo: tipo) { denominacion, conf in
             DispatchQueue.main.async {
                 self.isDetecting = false
@@ -410,6 +385,7 @@ struct IdentificadorView: View {
                     // Error en la clasificación
                     self.detectedLabel = "❌ Error al procesar la imagen"
                     self.confidence = 0.0
+                    self.detectedDenominationCode = nil
                     
                     let errorGenerator = UINotificationFeedbackGenerator()
                     errorGenerator.notificationOccurred(.error)
@@ -422,34 +398,27 @@ struct IdentificadorView: View {
                 
                 // Procesar resultado
                 if conf >= self.confianzaMinima {
-                    // ✅ Identificación exitosa - NAVEGAR AUTOMÁTICAMENTE
+                    // Identificación exitosa
                     self.detectedLabel = self.etiquetasPersonalizadas[denominacion] ?? denominacion.uppercased()
                     self.confidence = conf
+                    self.detectedDenominationCode = denominacion   // Guardar código (ej. "500b")
                     
                     // Haptic feedback de éxito
                     let successGenerator = UINotificationFeedbackGenerator()
                     successGenerator.notificationOccurred(.success)
-                    
-                    // NUEVO: Crear el item y activar navegación
-                    if let item = self.createCurrencyItem(from: denominacion) {
-                        self.detectedItem = item
-                        // Pequeño delay para mejor UX (opcional)
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                            self.navigateToDetail = true
-                        }
-                    }
                 } else {
-                    // ⚠️ Confianza insuficiente - MOSTRAR ALERTA
+                    // Confianza insuficiente
                     self.detectedLabel = "No se pudo identificar con suficiente confianza"
                     self.confidence = conf
+                    self.detectedDenominationCode = nil   // No identificado con confianza
                     
                     // Haptic feedback de advertencia
                     let warningGenerator = UINotificationFeedbackGenerator()
                     warningGenerator.notificationOccurred(.warning)
-                    
-                    withAnimation(.easeIn(duration: 0.15)) {
-                        self.showAlert = true
-                    }
+                }
+                
+                withAnimation(.easeIn(duration: 0.15)) {
+                    self.showAlert = true
                 }
             }
         }
