@@ -6,12 +6,63 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		2252A4D32EA5F48600E21975 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2252A4702EA5ED7A00E21975 /* WidgetKit.framework */; };
+		2252A4D42EA5F48600E21975 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2252A4722EA5ED7A00E21975 /* SwiftUI.framework */; };
+		2252A4DF2EA5F48800E21975 /* MonetaWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 2252A4D22EA5F48600E21975 /* MonetaWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2252A4DD2EA5F48800E21975 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 22D7943C2EA0A3FF00000E9B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2252A4D12EA5F48600E21975;
+			remoteInfo = MonetaWidgetsExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2252A4892EA5ED7C00E21975 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				2252A4DF2EA5F48800E21975 /* MonetaWidgetsExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		2252A4632EA5D52200E21975 /* Moneta-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Moneta-Info.plist"; sourceTree = "<group>"; };
+		2252A4702EA5ED7A00E21975 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		2252A4722EA5ED7A00E21975 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		2252A4D22EA5F48600E21975 /* MonetaWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MonetaWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		22D794442EA0A3FF00000E9B /* Moneta.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Moneta.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		2252A4E02EA5F48800E21975 /* Exceptions for "MonetaWidgets" folder in "MonetaWidgetsExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 2252A4D12EA5F48600E21975 /* MonetaWidgetsExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		2252A4D52EA5F48600E21975 /* MonetaWidgets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				2252A4E02EA5F48800E21975 /* Exceptions for "MonetaWidgets" folder in "MonetaWidgetsExtension" target */,
+			);
+			path = MonetaWidgets;
+			sourceTree = "<group>";
+		};
 		22D794462EA0A3FF00000E9B /* Divisas 2 */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "Divisas 2";
@@ -20,6 +71,15 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		2252A4CF2EA5F48600E21975 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2252A4D42EA5F48600E21975 /* SwiftUI.framework in Frameworks */,
+				2252A4D32EA5F48600E21975 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		22D794412EA0A3FF00000E9B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -30,11 +90,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2252A46F2EA5ED7A00E21975 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2252A4702EA5ED7A00E21975 /* WidgetKit.framework */,
+				2252A4722EA5ED7A00E21975 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		22D7943B2EA0A3FF00000E9B = {
 			isa = PBXGroup;
 			children = (
 				2252A4632EA5D52200E21975 /* Moneta-Info.plist */,
 				22D794462EA0A3FF00000E9B /* Divisas 2 */,
+				2252A4D52EA5F48600E21975 /* MonetaWidgets */,
+				2252A46F2EA5ED7A00E21975 /* Frameworks */,
 				22D794452EA0A3FF00000E9B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				22D794442EA0A3FF00000E9B /* Moneta.app */,
+				2252A4D22EA5F48600E21975 /* MonetaWidgetsExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -50,6 +122,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		2252A4D12EA5F48600E21975 /* MonetaWidgetsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2252A4E12EA5F48800E21975 /* Build configuration list for PBXNativeTarget "MonetaWidgetsExtension" */;
+			buildPhases = (
+				2252A4CE2EA5F48600E21975 /* Sources */,
+				2252A4CF2EA5F48600E21975 /* Frameworks */,
+				2252A4D02EA5F48600E21975 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				2252A4D52EA5F48600E21975 /* MonetaWidgets */,
+			);
+			name = MonetaWidgetsExtension;
+			packageProductDependencies = (
+			);
+			productName = MonetaWidgetsExtension;
+			productReference = 2252A4D22EA5F48600E21975 /* MonetaWidgetsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		22D794432EA0A3FF00000E9B /* Moneta */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 22D7944F2EA0A40100000E9B /* Build configuration list for PBXNativeTarget "Moneta" */;
@@ -57,10 +151,12 @@
 				22D794402EA0A3FF00000E9B /* Sources */,
 				22D794412EA0A3FF00000E9B /* Frameworks */,
 				22D794422EA0A3FF00000E9B /* Resources */,
+				2252A4892EA5ED7C00E21975 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				2252A4DE2EA5F48800E21975 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				22D794462EA0A3FF00000E9B /* Divisas 2 */,
@@ -82,6 +178,9 @@
 				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
+					2252A4D12EA5F48600E21975 = {
+						CreatedOnToolsVersion = 26.0.1;
+					};
 					22D794432EA0A3FF00000E9B = {
 						CreatedOnToolsVersion = 26.0.1;
 					};
@@ -102,11 +201,19 @@
 			projectRoot = "";
 			targets = (
 				22D794432EA0A3FF00000E9B /* Moneta */,
+				2252A4D12EA5F48600E21975 /* MonetaWidgetsExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		2252A4D02EA5F48600E21975 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		22D794422EA0A3FF00000E9B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -117,6 +224,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		2252A4CE2EA5F48600E21975 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		22D794402EA0A3FF00000E9B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -126,7 +240,80 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		2252A4DE2EA5F48800E21975 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2252A4D12EA5F48600E21975 /* MonetaWidgetsExtension */;
+			targetProxy = 2252A4DD2EA5F48800E21975 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		2252A4E22EA5F48800E21975 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XG8453ZG5K;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MonetaWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MonetaWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "lapiz.Divisas-2.MonetaWidgets";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		2252A4E32EA5F48800E21975 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XG8453ZG5K;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MonetaWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MonetaWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "lapiz.Divisas-2.MonetaWidgets";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		22D7944D2EA0A40100000E9B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -258,7 +445,10 @@
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Moneta-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Esta aplicación necesita acceso a la cámara";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "La app necesita acceso a tu ubicación incluso en segundo plano.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "La app necesita acceso a tu ubicación mientras la usas.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -307,7 +497,10 @@
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Moneta-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Esta aplicación necesita acceso a la cámara";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "La app necesita acceso a tu ubicación incluso en segundo plano.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "La app necesita acceso a tu ubicación mientras la usas.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -344,6 +537,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		2252A4E12EA5F48800E21975 /* Build configuration list for PBXNativeTarget "MonetaWidgetsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2252A4E22EA5F48800E21975 /* Debug */,
+				2252A4E32EA5F48800E21975 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		22D7943F2EA0A3FF00000E9B /* Build configuration list for PBXProject "Moneta" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

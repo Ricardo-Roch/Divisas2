@@ -530,7 +530,88 @@ struct LocalizedStrings {
                 .italian: "OK",
                 .chinese: "确定",
                 .japanese: "OK"
-            ]
+            ],
+            // MARK: - MarketsView
+            "financial_services": [
+                .spanish: "Servicios Financieros",
+                .english: "Financial Services",
+                .french: "Services Financiers",
+                .portuguese: "Serviços Financeiros",
+                .german: "Finanzdienstleistungen",
+                .italian: "Servizi Finanziari",
+                .chinese: "金融服务",
+                .japanese: "金融サービス"
+            ],
+            "searching_places": [
+                .spanish: "Buscando lugares...",
+                .english: "Searching places...",
+                .french: "Recherche de lieux...",
+                .portuguese: "Procurando lugares...",
+                .german: "Orte suchen...",
+                .italian: "Cercando luoghi...",
+                .chinese: "搜索地点...",
+                .japanese: "場所を検索中..."
+            ],
+            "no_places_found": [
+                .spanish: "No se encontraron lugares",
+                .english: "No places found",
+                .french: "Aucun lieu trouvé",
+                .portuguese: "Nenhum lugar encontrado",
+                .german: "Keine Orte gefunden",
+                .italian: "Nessun luogo trovato",
+                .chinese: "未找到地点",
+                .japanese: "場所が見つかりません"
+            ],
+            "try_another_location": [
+                .spanish: "Intenta con otra ubicación o habilita los servicios de localización.",
+                .english: "Try another location or enable location services.",
+                .french: "Essayez un autre emplacement ou activez les services de localisation.",
+                .portuguese: "Tente outro local ou ative os serviços de localização.",
+                .german: "Versuchen Sie einen anderen Standort oder aktivieren Sie die Ortungsdienste.",
+                .italian: "Prova un'altra posizione o abilita i servizi di localizzazione.",
+                .chinese: "尝试其他位置或启用定位服务。",
+                .japanese: "別の場所を試すか、位置情報サービスを有効にしてください。"
+            ],
+            "enable_location": [
+                .spanish: "Habilitar Ubicación",
+                .english: "Enable Location",
+                .french: "Activer la localisation",
+                .portuguese: "Ativar Localização",
+                .german: "Standort aktivieren",
+                .italian: "Abilita Posizione",
+                .chinese: "启用定位",
+                .japanese: "位置情報を有効にする"
+            ],
+            "bank_label": [
+                .spanish: "Banco",
+                .english: "Bank",
+                .french: "Banque",
+                .portuguese: "Banco",
+                .german: "Bank",
+                .italian: "Banca",
+                .chinese: "银行",
+                .japanese: "銀行"
+            ],
+            "atm_label": [
+                .spanish: "ATM",
+                .english: "ATM",
+                .french: "GAB",
+                .portuguese: "Caixa Eletrônico",
+                .german: "Geldautomat",
+                .italian: "Bancomat",
+                .chinese: "自动取款机",
+                .japanese: "ATM"
+            ],
+            "exchange_house": [
+                .spanish: "Casa de Cambio",
+                .english: "Exchange House",
+                .french: "Bureau de Change",
+                .portuguese: "Casa de Câmbio",
+                .german: "Wechselstube",
+                .italian: "Ufficio Cambio",
+                .chinese: "货币兑换处",
+                .japanese: "両替所"
+            ],
         ]
         
         return translations[key]?[language] ?? key

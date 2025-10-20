@@ -37,9 +37,9 @@ struct FinancialPlace: Identifiable {
         
         var localizedName: String {
             switch self {
-            case .bank: return "Banco"
-            case .atm: return "ATM"
-            case .exchange: return "Casa de Cambio"
+            case .bank: return "bank_label".localized()
+            case .atm: return "atm_label".localized()
+            case .exchange: return "exchange_house".localized()
             }
         }
         
@@ -332,7 +332,7 @@ struct MarketsView: View {
                 placesList
             }
         }
-        .navigationTitle("Servicios Financieros")
+        .navigationTitle("financial_services".localized())
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -455,7 +455,7 @@ struct MarketsView: View {
                         VStack(spacing: 16) {
                             ProgressView()
                                 .scaleEffect(1.2)
-                            Text("Buscando lugares...")
+                            Text("searching_places".localized())
                                 .font(.subheadline)
                                 .foregroundColor(.appTextSecondary)
                         }
@@ -493,18 +493,14 @@ struct MarketsView: View {
             Image(systemName: "mappin.slash")
                 .font(.system(size: 60))
                 .foregroundColor(.gray)
-            Text("No se encontraron lugares")
+            Text("no_places_found".localized())
                 .font(.headline)
                 .foregroundColor(.appTextSecondary)
-            Text("Intenta con otra ubicación o habilita los servicios de localización.")
-                .font(.subheadline)
-                .foregroundColor(.appTextSecondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 40)
+            Text("try_another_location".localized())
             
             if locationManager.authorizationStatus != .authorizedWhenInUse &&
                locationManager.authorizationStatus != .authorizedAlways {
-                Button("Habilitar Ubicación") {
+                Button("enable_location".localized()) {
                     locationManager.requestLocation()
                 }
                 .foregroundColor(.appTextPrimary)
