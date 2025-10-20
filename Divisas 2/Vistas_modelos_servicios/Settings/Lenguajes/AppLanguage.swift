@@ -1157,6 +1157,187 @@ struct LocalizedStrings {
                 .chinese: "100加元纸币",
                 .japanese: "100ドル紙幣"
             ],
+            // MARK: - IdentificadorView - Denominaciones
+            "bill_20": [
+                .spanish: "💵 Billete de $20 pesos",
+                .english: "💵 $20 pesos bill",
+                .french: "💵 Billet de 20 pesos",
+                .portuguese: "💵 Nota de 20 pesos",
+                .german: "💵 20-Pesos-Schein",
+                .italian: "💵 Banconota da 20 pesos",
+                .chinese: "💵 20比索纸币",
+                .japanese: "💵 20ペソ紙幣"
+            ],
+            "bill_50": [
+                .spanish: "💵 Billete de $50 pesos",
+                .english: "💵 $50 pesos bill",
+                .french: "💵 Billet de 50 pesos",
+                .portuguese: "💵 Nota de 50 pesos",
+                .german: "💵 50-Pesos-Schein",
+                .italian: "💵 Banconota da 50 pesos",
+                .chinese: "💵 50比索纸币",
+                .japanese: "💵 50ペソ紙幣"
+            ],
+            "bill_100": [
+                .spanish: "💵 Billete de $100 pesos",
+                .english: "💵 $100 pesos bill",
+                .french: "💵 Billet de 100 pesos",
+                .portuguese: "💵 Nota de 100 pesos",
+                .german: "💵 100-Pesos-Schein",
+                .italian: "💵 Banconota da 100 pesos",
+                .chinese: "💵 100比索纸币",
+                .japanese: "💵 100ペソ紙幣"
+            ],
+            "bill_200": [
+                .spanish: "💵 Billete de $200 pesos",
+                .english: "💵 $200 pesos bill",
+                .french: "💵 Billet de 200 pesos",
+                .portuguese: "💵 Nota de 200 pesos",
+                .german: "💵 200-Pesos-Schein",
+                .italian: "💵 Banconota da 200 pesos",
+                .chinese: "💵 200比索纸币",
+                .japanese: "💵 200ペソ紙幣"
+            ],
+            "bill_500": [
+                .spanish: "💵 Billete de $500 pesos",
+                .english: "💵 $500 pesos bill",
+                .french: "💵 Billet de 500 pesos",
+                .portuguese: "💵 Nota de 500 pesos",
+                .german: "💵 500-Pesos-Schein",
+                .italian: "💵 Banconota da 500 pesos",
+                .chinese: "💵 500比索纸币",
+                .japanese: "💵 500ペソ紙幣"
+            ],
+            "bill_1000": [
+                .spanish: "💵 Billete de $1,000 pesos",
+                .english: "💵 $1,000 pesos bill",
+                .french: "💵 Billet de 1 000 pesos",
+                .portuguese: "💵 Nota de 1.000 pesos",
+                .german: "💵 1.000-Pesos-Schein",
+                .italian: "💵 Banconota da 1.000 pesos",
+                .chinese: "💵 1,000比索纸币",
+                .japanese: "💵 1,000ペソ紙幣"
+            ],
+            "coin_10c": [
+                .spanish: "🪙 Moneda de 10 centavos",
+                .english: "🪙 10 cents coin",
+                .french: "🪙 Pièce de 10 centimes",
+                .portuguese: "🪙 Moeda de 10 centavos",
+                .german: "🪙 10-Centavos-Münze",
+                .italian: "🪙 Moneta da 10 centesimi",
+                .chinese: "🪙 10分硬币",
+                .japanese: "🪙 10センタボス硬貨"
+            ],
+            "coin_50c": [
+                .spanish: "🪙 Moneda de 50 centavos",
+                .english: "🪙 50 cents coin",
+                .french: "🪙 Pièce de 50 centimes",
+                .portuguese: "🪙 Moeda de 50 centavos",
+                .german: "🪙 50-Centavos-Münze",
+                .italian: "🪙 Moneta da 50 centesimi",
+                .chinese: "🪙 50分硬币",
+                .japanese: "🪙 50センタボス硬貨"
+            ],
+            "coin_1p": [
+                .spanish: "🪙 Moneda de $1 peso",
+                .english: "🪙 $1 peso coin",
+                .french: "🪙 Pièce de 1 peso",
+                .portuguese: "🪙 Moeda de 1 peso",
+                .german: "🪙 1-Peso-Münze",
+                .italian: "🪙 Moneta da 1 peso",
+                .chinese: "🪙 1比索硬币",
+                .japanese: "🪙 1ペソ硬貨"
+            ],
+            "coin_2p": [
+                .spanish: "🪙 Moneda de $2 pesos",
+                .english: "🪙 $2 pesos coin",
+                .french: "🪙 Pièce de 2 pesos",
+                .portuguese: "🪙 Moeda de 2 pesos",
+                .german: "🪙 2-Pesos-Münze",
+                .italian: "🪙 Moneta da 2 pesos",
+                .chinese: "🪙 2比索硬币",
+                .japanese: "🪙 2ペソ硬貨"
+            ],
+            "coin_5p": [
+                .spanish: "🪙 Moneda de $5 pesos",
+                .english: "🪙 $5 pesos coin",
+                .french: "🪙 Pièce de 5 pesos",
+                .portuguese: "🪙 Moeda de 5 pesos",
+                .german: "🪙 5-Pesos-Münze",
+                .italian: "🪙 Moneta da 5 pesos",
+                .chinese: "🪙 5比索硬币",
+                .japanese: "🪙 5ペソ硬貨"
+            ],
+            "coin_10p": [
+                .spanish: "🪙 Moneda de $10 pesos",
+                .english: "🪙 $10 pesos coin",
+                .french: "🪙 Pièce de 10 pesos",
+                .portuguese: "🪙 Moeda de 10 pesos",
+                .german: "🪙 10-Pesos-Münze",
+                .italian: "🪙 Moneta da 10 pesos",
+                .chinese: "🪙 10比索硬币",
+                .japanese: "🪙 10ペソ硬貨"
+            ],
+            "coin_20p": [
+                .spanish: "🪙 Moneda de $20 pesos",
+                .english: "🪙 $20 pesos coin",
+                .french: "🪙 Pièce de 20 pesos",
+                .portuguese: "🪙 Moeda de 20 pesos",
+                .german: "🪙 20-Pesos-Münze",
+                .italian: "🪙 Moneta da 20 pesos",
+                .chinese: "🪙 20比索硬币",
+                .japanese: "🪙 20ペソ硬貨"
+            ],
+            "detecting_model": [
+                .spanish: "Detectando: {model}",
+                .english: "Detecting: {model}",
+                .french: "Détection: {model}",
+                .portuguese: "Detectando: {model}",
+                .german: "Erkennung: {model}",
+                .italian: "Rilevamento: {model}",
+                .chinese: "检测中：{model}",
+                .japanese: "検出中：{model}"
+            ],
+            "analyzing_type": [
+                .spanish: "Analizando {type}...",
+                .english: "Analyzing {type}...",
+                .french: "Analyse de {type}...",
+                .portuguese: "Analisando {type}...",
+                .german: "Analysiere {type}...",
+                .italian: "Analizzando {type}...",
+                .chinese: "分析{type}中...",
+                .japanese: "{type}を分析中..."
+            ],
+            "processing_error": [
+                .spanish: "❌ Error al procesar la imagen",
+                .english: "❌ Error processing image",
+                .french: "❌ Erreur de traitement de l'image",
+                .portuguese: "❌ Erro ao processar imagem",
+                .german: "❌ Fehler beim Verarbeiten des Bildes",
+                .italian: "❌ Errore nell'elaborazione dell'immagine",
+                .chinese: "❌ 处理图像时出错",
+                .japanese: "❌ 画像処理エラー"
+            ],
+            "low_confidence_message": [
+                .spanish: "No se pudo identificar con suficiente confianza",
+                .english: "Could not identify with sufficient confidence",
+                .french: "Impossible d'identifier avec suffisamment de confiance",
+                .portuguese: "Não foi possível identificar com confiança suficiente",
+                .german: "Konnte nicht mit ausreichender Sicherheit identifiziert werden",
+                .italian: "Impossibile identificare con sufficiente confidenza",
+                .chinese: "无法以足够的置信度识别",
+                .japanese: "十分な信頼度で識別できませんでした"
+            ],
+            "coin_cent_singular": [
+                .spanish: "Moneda de {value} centavo mexicano",
+                .english: "{value} cent Mexican coin",
+                .french: "Pièce de {value} centime mexicain",
+                .portuguese: "Moeda de {value} centavo mexicano",
+                .german: "{value} Centavo mexikanische Münze",
+                .italian: "Moneta da {value} centesimo messicano",
+                .chinese: "{value}分墨西哥硬币",
+                .japanese: "メキシコ{value}センタボス硬貨"
+            ],
         ]
         
         return translations[key]?[language] ?? key

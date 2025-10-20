@@ -10,6 +10,8 @@ import AVFoundation
 
 struct IdentificadorView: View {
     @StateObject private var clasificador = ClasificadorDenominacionesWrapper()!
+    @StateObject private var localization = LocalizationManager3.shared
+    
     @State private var showAlert = false
     @State private var detectedLabel = ""
     @State private var confidence: Float = 0.0
@@ -22,50 +24,48 @@ struct IdentificadorView: View {
     @State private var navigateToDetail = false
     @State private var detectedDenominationCode: String? = nil
     
-    // ✅ NUEVO: Estado para reiniciar la cámara
     @State private var cameraKey = UUID()
     
-    private let modelos = ["Billetes", "Monedas"]
+    private var modelos: [String] {
+        ["bills".localized(), "coins".localized()]
+    }
+    
     private let confianzaMinima: Float = 0.75
     
-    // Diccionario de etiquetas personalizadas
-    private let etiquetasPersonalizadas: [String: String] = [
-        // Billetes
-        "20b": "💵 Billete de $20 pesos",
-        "50b": "💵 Billete de $50 pesos",
-        "100b": "💵 Billete de $100 pesos",
-        "200b": "💵 Billete de $200 pesos",
-        "500b": "💵 Billete de $500 pesos",
-        "1000b": "💵 Billete de $1,000 pesos",
-        
-        // Monedas
-        "10c": "🪙 Moneda de 10 centavos",
-        "50c": "🪙 Moneda de 50 centavos",
-        "1p": "🪙 Moneda de $1 peso",
-        "2p": "🪙 Moneda de $2 pesos",
-        "5p": "🪙 Moneda de $5 pesos",
-        "10p": "🪙 Moneda de $10 pesos",
-        "20p": "🪙 Moneda de $20 pesos"
-    ]
+    // Diccionario de etiquetas personalizadas usando las traducciones
+    private var etiquetasPersonalizadas: [String: String] {
+        [
+            "20b": "bill_20".localized(),
+            "50b": "bill_50".localized(),
+            "100b": "bill_100".localized(),
+            "200b": "bill_200".localized(),
+            "500b": "bill_500".localized(),
+            "1000b": "bill_1000".localized(),
+            "10c": "coin_10c".localized(),
+            "50c": "coin_50c".localized(),
+            "1p": "coin_1p".localized(),
+            "2p": "coin_2p".localized(),
+            "5p": "coin_5p".localized(),
+            "10p": "coin_10p".localized(),
+            "20p": "coin_20p".localized()
+        ]
+    }
     
     var body: some View {
         ZStack {
-            // ✅ Vista de la cámara con key para forzar recreación
             CameraView { pixelBuffer in
                 if !isDetecting {
                     self.currentBuffer = pixelBuffer
                 }
             }
-            .id(cameraKey) // ✅ Key para reiniciar la vista
+            .id(cameraKey)
             .edgesIgnoringSafeArea(.all)
             
-            // Overlay oscuro durante la detección
             if isDetecting {
                 Color.black.opacity(0.4)
                     .edgesIgnoringSafeArea(.all)
             }
             
-            // Controles de UI
             VStack(spacing: 0) {
                 // Header con indicador del modelo activo
                 HStack {
@@ -73,7 +73,7 @@ struct IdentificadorView: View {
                         Image(systemName: selectedModelIndex == 0 ? "banknote" : "dollarsign.circle")
                             .font(.system(size: 16, weight: .medium))
                         
-                        Text("Detectando: \(modelos[selectedModelIndex])")
+                        Text("detecting_model".localized().replacingOccurrences(of: "{model}", with: modelos[selectedModelIndex]))
                             .font(.system(size: 14, weight: .medium))
                     }
                     .foregroundColor(.white)
@@ -134,7 +134,7 @@ struct IdentificadorView: View {
                 .padding(.horizontal, 24)
                 .padding(.bottom, 32)
                 
-                // Botón de captura tipo cámara
+                // Botón de captura
                 Button(action: {
                     detectarObjeto()
                 }) {
@@ -160,14 +160,14 @@ struct IdentificadorView: View {
                 .padding(.bottom, 50)
             }
             
-            // Indicador de carga full screen
+            // Indicador de carga
             if isDetecting {
                 VStack(spacing: 16) {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle(tint: .white))
                         .scaleEffect(1.5)
                     
-                    Text("Analizando \(modelos[selectedModelIndex].lowercased())...")
+                    Text("analyzing_type".localized().replacingOccurrences(of: "{type}", with: modelos[selectedModelIndex].lowercased()))
                         .foregroundColor(.white)
                         .font(.system(size: 16, weight: .medium))
                 }
@@ -179,13 +179,13 @@ struct IdentificadorView: View {
                 )
             }
             
-            // Overlay (toast) no bloqueante con botón OK
+            // Alert overlay
             if showAlert {
                 VStack(spacing: 12) {
-                    Text(confidence >= confianzaMinima ? "✅ Identificado" : "⚠️ Confianza baja")
+                    Text(confidence >= confianzaMinima ? "identified".localized() : "low_confidence".localized())
                         .font(.headline)
                         .multilineTextAlignment(.center)
-                    Text("\(detectedLabel)\n\nConfianza: \(String(format: "%.1f", confidence * 100))%")
+                    Text("\(detectedLabel)\n\n\("confidence".localized()): \(String(format: "%.1f", confidence * 100))%")
                         .multilineTextAlignment(.center)
                         .padding(.bottom, 4)
                     Button {
@@ -207,17 +207,17 @@ struct IdentificadorView: View {
                         if code.hasSuffix("b") {
                             let valorNum = String(code.dropLast())
                             valueStr = valorNum
-                            displayName = "Billete de \(valorNum) pesos mexicanos"
+                            displayName = "mexican_bill".localized().replacingOccurrences(of: "{value}", with: valorNum)
                         } else if code.hasSuffix("c") {
                             let centavosNum = String(code.dropLast())
                             valueStr = "0.\(centavosNum)"
-                            displayName = "Moneda de \(centavosNum) centavos mexicanos"
+                            displayName = "mexican_coin_cents".localized().replacingOccurrences(of: "{value}", with: centavosNum)
                         } else {
                             let pesosNum = String(code.dropLast())
                             valueStr = pesosNum
                             displayName = (pesosNum == "1")
-                                ? "Moneda de 1 peso mexicano"
-                                : "Moneda de \(pesosNum) pesos mexicanos"
+                                ? "mexican_coin_peso".localized().replacingOccurrences(of: "{value}", with: pesosNum)
+                                : "mexican_coin_pesos".localized().replacingOccurrences(of: "{value}", with: pesosNum)
                         }
 
                         let iconName = code.hasSuffix("b") ? "banknote.fill" : "bitcoinsign.circle.fill"
@@ -231,7 +231,7 @@ struct IdentificadorView: View {
 
                         navigateToDetail = true
                     } label: {
-                        Text("OK")
+                        Text("ok".localized())
                             .font(.system(size: 16, weight: .semibold))
                             .padding(.vertical, 10)
                             .padding(.horizontal, 24)
@@ -268,25 +268,22 @@ struct IdentificadorView: View {
             }
             .hidden()
         }
-        .alert("Permiso de Cámara Requerido", isPresented: $showCameraPermissionAlert) {
-            Button("Ir a Ajustes", role: .none) {
+        .alert("camera_permission_required".localized(), isPresented: $showCameraPermissionAlert) {
+            Button("open_settings".localized(), role: .none) {
                 if let url = URL(string: UIApplication.openSettingsURLString) {
                     UIApplication.shared.open(url)
                 }
             }
-            Button("Cancelar", role: .cancel) {}
+            Button("cancel".localized(), role: .cancel) {}
         } message: {
-            Text("Esta app necesita acceso a la cámara para identificar billetes y monedas. Por favor, habilita el acceso en Ajustes.")
+            Text("camera_permission_desc".localized())
         }
         .onAppear {
             verificarPermisosCamara()
-            // ✅ Reiniciar la cámara cuando la vista aparece
             reiniciarCamara()
         }
-        // ✅ NUEVO: Observar cuando volvemos de la navegación
         .onChange(of: navigateToDetail) { isNavigating in
             if !isNavigating {
-                // Cuando volvemos de la navegación, reiniciamos todo
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     reiniciarCamara()
                     limpiarEstado()
@@ -297,14 +294,12 @@ struct IdentificadorView: View {
     
     // MARK: - Funciones privadas
     
-    // ✅ NUEVA: Función para reiniciar la cámara
     private func reiniciarCamara() {
         currentBuffer = nil
-        cameraKey = UUID() // Esto fuerza a recrear la CameraView
+        cameraKey = UUID()
         print("🔄 Cámara reiniciada")
     }
     
-    // ✅ NUEVA: Función para limpiar el estado
     private func limpiarEstado() {
         selectedCurrencyItem = nil
         detectedLabel = ""
@@ -398,7 +393,7 @@ struct IdentificadorView: View {
                 self.isDetecting = false
                 
                 guard let denominacion = denominacion, let conf = conf else {
-                    self.detectedLabel = "❌ Error al procesar la imagen"
+                    self.detectedLabel = "processing_error".localized()
                     self.confidence = 0.0
                     self.detectedDenominationCode = nil
                     
@@ -419,7 +414,7 @@ struct IdentificadorView: View {
                     let successGenerator = UINotificationFeedbackGenerator()
                     successGenerator.notificationOccurred(.success)
                 } else {
-                    self.detectedLabel = "No se pudo identificar con suficiente confianza"
+                    self.detectedLabel = "low_confidence_message".localized()
                     self.confidence = conf
                     self.detectedDenominationCode = nil
                     
