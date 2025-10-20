@@ -9,6 +9,24 @@
 
 import SwiftUI
 
+// Agregar después de los imports y antes del struct
+extension MexCurrencySearchView {
+    func localizedCurrencyName(type: CurrencyItem.CurrencyType, value: String) -> String {
+        if type == .coin {
+            let numValue = Double(value) ?? 0
+            if numValue < 1 {
+                return "mexican_coin_cents".localized().replacingOccurrences(of: "{value}", with: String(Int(numValue * 100)))
+            } else if numValue == 1 {
+                return "mexican_coin_peso".localized().replacingOccurrences(of: "{value}", with: value)
+            } else {
+                return "mexican_coin_pesos".localized().replacingOccurrences(of: "{value}", with: value)
+            }
+        } else {
+            return "mexican_bill".localized().replacingOccurrences(of: "{value}", with: value)
+        }
+    }
+}
+
 struct MexCurrencySearchView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) private var colorScheme
@@ -27,25 +45,27 @@ struct MexCurrencySearchView: View {
         }
     }
     
-    let currencyItems: [CurrencyItem] = [
-        // Monedas
-        CurrencyItem(type: .coin, value: "0.10", displayName: "Moneda de 10 centavos mexicanos", icon: "bitcoinsign.circle.fill"),
-        CurrencyItem(type: .coin, value: "0.20", displayName: "Moneda de 20 centavos mexicanos", icon: "bitcoinsign.circle.fill"),
-        CurrencyItem(type: .coin, value: "0.50", displayName: "Moneda de 50 centavos mexicanos", icon: "bitcoinsign.circle.fill"),
-        CurrencyItem(type: .coin, value: "1", displayName: "Moneda de 1 peso mexicano", icon: "bitcoinsign.circle.fill"),
-        CurrencyItem(type: .coin, value: "2", displayName: "Moneda de 2 pesos mexicanos", icon: "bitcoinsign.circle.fill"),
-        CurrencyItem(type: .coin, value: "5", displayName: "Moneda de 5 pesos mexicanos", icon: "bitcoinsign.circle.fill"),
-        CurrencyItem(type: .coin, value: "10", displayName: "Moneda de 10 pesos mexicanos", icon: "bitcoinsign.circle.fill"),
-        CurrencyItem(type: .coin, value: "20", displayName: "Moneda de 20 pesos mexicanos", icon: "bitcoinsign.circle.fill"),
-        
-        // Billetes
-        CurrencyItem(type: .bill, value: "20", displayName: "Billete de 20 pesos mexicanos", icon: "banknote.fill"),
-        CurrencyItem(type: .bill, value: "50", displayName: "Billete de 50 pesos mexicanos", icon: "banknote.fill"),
-        CurrencyItem(type: .bill, value: "100", displayName: "Billete de 100 pesos mexicanos", icon: "banknote.fill"),
-        CurrencyItem(type: .bill, value: "200", displayName: "Billete de 200 pesos mexicanos", icon: "banknote.fill"),
-        CurrencyItem(type: .bill, value: "500", displayName: "Billete de 500 pesos mexicanos", icon: "banknote.fill"),
-        CurrencyItem(type: .bill, value: "1000", displayName: "Billete de 1000 pesos mexicanos", icon: "banknote.fill")
-    ]
+    var currencyItems: [CurrencyItem] {
+        [
+            // Monedas
+            CurrencyItem(type: .coin, value: "0.10", displayName: localizedCurrencyName(type: .coin, value: "0.10"), icon: "bitcoinsign.circle.fill"),
+            CurrencyItem(type: .coin, value: "0.20", displayName: localizedCurrencyName(type: .coin, value: "0.20"), icon: "bitcoinsign.circle.fill"),
+            CurrencyItem(type: .coin, value: "0.50", displayName: localizedCurrencyName(type: .coin, value: "0.50"), icon: "bitcoinsign.circle.fill"),
+            CurrencyItem(type: .coin, value: "1", displayName: localizedCurrencyName(type: .coin, value: "1"), icon: "bitcoinsign.circle.fill"),
+            CurrencyItem(type: .coin, value: "2", displayName: localizedCurrencyName(type: .coin, value: "2"), icon: "bitcoinsign.circle.fill"),
+            CurrencyItem(type: .coin, value: "5", displayName: localizedCurrencyName(type: .coin, value: "5"), icon: "bitcoinsign.circle.fill"),
+            CurrencyItem(type: .coin, value: "10", displayName: localizedCurrencyName(type: .coin, value: "10"), icon: "bitcoinsign.circle.fill"),
+            CurrencyItem(type: .coin, value: "20", displayName: localizedCurrencyName(type: .coin, value: "20"), icon: "bitcoinsign.circle.fill"),
+            
+            // Billetes
+            CurrencyItem(type: .bill, value: "20", displayName: localizedCurrencyName(type: .bill, value: "20"), icon: "banknote.fill"),
+            CurrencyItem(type: .bill, value: "50", displayName: localizedCurrencyName(type: .bill, value: "50"), icon: "banknote.fill"),
+            CurrencyItem(type: .bill, value: "100", displayName: localizedCurrencyName(type: .bill, value: "100"), icon: "banknote.fill"),
+            CurrencyItem(type: .bill, value: "200", displayName: localizedCurrencyName(type: .bill, value: "200"), icon: "banknote.fill"),
+            CurrencyItem(type: .bill, value: "500", displayName: localizedCurrencyName(type: .bill, value: "500"), icon: "banknote.fill"),
+            CurrencyItem(type: .bill, value: "1000", displayName: localizedCurrencyName(type: .bill, value: "1000"), icon: "banknote.fill")
+        ]
+    }
     
     var filteredItems: [CurrencyItem] {
         if searchText.isEmpty {
@@ -69,14 +89,18 @@ struct MexCurrencySearchView: View {
                     Button(action: {
                         dismiss()
                     }) {
-                        HStack(spacing: 4) {
+                        ZStack {
+                            Circle()
+                                .fill(.ultraThinMaterial)
+                                .overlay(Circle().strokeBorder(Color.appTextPrimary.opacity(0.1), lineWidth: 1))
+                            
                             Image(systemName: "chevron.left")
-                                .font(.system(size: 17, weight: .semibold))
-                            Text("Home")
-                                .font(.system(size: 17))
+                                .font(.system(size: 18, weight: .semibold))
+                                .foregroundColor(.appTextPrimary)
                         }
-                        .foregroundColor(.appTextPrimary)
+                        .frame(width: 44, height: 44)
                     }
+                    .buttonStyle(.plain)
                     
                     Spacer()
                 }
@@ -86,7 +110,7 @@ struct MexCurrencySearchView: View {
                 
                 // Título
                 HStack {
-                    Text("Monedas y Billetes")
+                    Text("coins_and_bills".localized())
                         .font(.system(size: 34, weight: .bold))
                         .foregroundColor(.appTextPrimary)
                     
@@ -101,7 +125,7 @@ struct MexCurrencySearchView: View {
                         .foregroundColor(.appTextSecondary)
                         .font(.system(size: 16))
                     
-                    TextField("Buscar moneda o billete", text: $searchText)
+                    TextField("search_coin_or_bill".localized(), text: $searchText)
                         .foregroundColor(.appTextPrimary)
                         .font(.system(size: 16))
                     
@@ -129,7 +153,7 @@ struct MexCurrencySearchView: View {
                 
                 // Subtexto
                 HStack {
-                    Text("Busca cualquier moneda de México en circulación actualmente")
+                    Text("search_any_currency".localized())
                         .font(.system(size: 14))
                         .foregroundColor(.appTextSecondary)
                     
@@ -154,11 +178,11 @@ struct MexCurrencySearchView: View {
                                     .font(.system(size: 48))
                                     .foregroundColor(.appTextSecondary)
                                 
-                                Text("No se encontraron resultados")
+                                Text("no_results_found".localized())
                                     .font(.system(size: 18, weight: .semibold))
                                     .foregroundColor(.appTextPrimary)
                                 
-                                Text("Intenta con otro término de búsqueda")
+                                Text("try_another_search".localized())
                                     .font(.system(size: 14))
                                     .foregroundColor(.appTextSecondary)
                             }
@@ -203,7 +227,7 @@ private struct CurrencyItemCard: View {
                     .font(.system(size: 17, weight: .semibold))
                     .foregroundColor(.appTextPrimary)
                 
-                Text(item.type == .coin ? "Moneda" : "Billete")
+                Text(item.type == .coin ? "coin".localized() : "bill".localized())
                     .font(.system(size: 14))
                     .foregroundColor(.appTextSecondary)
             }

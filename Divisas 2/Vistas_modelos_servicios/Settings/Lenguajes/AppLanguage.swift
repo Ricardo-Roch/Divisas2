@@ -612,6 +612,551 @@ struct LocalizedStrings {
                 .chinese: "货币兑换处",
                 .japanese: "両替所"
             ],
+            // MARK: - NationalCurrencyView & MexicanCoinDetailView
+            "national_currencies": [
+                .spanish: "Divisas Nacional",
+                .english: "National Currency",
+                .french: "Monnaie Nationale",
+                .portuguese: "Moeda Nacional",
+                .german: "Landeswährung",
+                .italian: "Valuta Nazionale",
+                .chinese: "国家货币",
+                .japanese: "国内通貨"
+            ],
+            "choose_currency": [
+                .spanish: "Elige la moneda de tu preferencia que desees conocer",
+                .english: "Choose the currency you want to know",
+                .french: "Choisissez la devise que vous souhaitez connaître",
+                .portuguese: "Escolha a moeda que deseja conhecer",
+                .german: "Wählen Sie die Währung, die Sie kennenlernen möchten",
+                .italian: "Scegli la valuta che vuoi conoscere",
+                .chinese: "选择您想了解的货币",
+                .japanese: "知りたい通貨を選択してください"
+            ],
+            "mexican_peso": [
+                .spanish: "Peso Mexicano",
+                .english: "Mexican Peso",
+                .french: "Peso Mexicain",
+                .portuguese: "Peso Mexicano",
+                .german: "Mexikanischer Peso",
+                .italian: "Peso Messicano",
+                .chinese: "墨西哥比索",
+                .japanese: "メキシコペソ"
+            ],
+            "us_dollar": [
+                .spanish: "Dólar Estadounidense",
+                .english: "US Dollar",
+                .french: "Dollar Américain",
+                .portuguese: "Dólar Americano",
+                .german: "US-Dollar",
+                .italian: "Dollaro Americano",
+                .chinese: "美元",
+                .japanese: "米ドル"
+            ],
+            "canadian_dollar": [
+                .spanish: "Dólar Canadiense",
+                .english: "Canadian Dollar",
+                .french: "Dollar Canadien",
+                .portuguese: "Dólar Canadense",
+                .german: "Kanadischer Dollar",
+                .italian: "Dollaro Canadese",
+                .chinese: "加元",
+                .japanese: "カナダドル"
+            ],
+            "characteristics": [
+                .spanish: "Características",
+                .english: "Characteristics",
+                .french: "Caractéristiques",
+                .portuguese: "Características",
+                .german: "Eigenschaften",
+                .italian: "Caratteristiche",
+                .chinese: "特征",
+                .japanese: "特性"
+            ],
+            "issuer": [
+                .spanish: "Emisor",
+                .english: "Issuer",
+                .french: "Émetteur",
+                .portuguese: "Emissor",
+                .german: "Emittent",
+                .italian: "Emittente",
+                .chinese: "发行人",
+                .japanese: "発行者"
+            ],
+            "years": [
+                .spanish: "Años",
+                .english: "Years",
+                .french: "Années",
+                .portuguese: "Anos",
+                .german: "Jahre",
+                .italian: "Anni",
+                .chinese: "年份",
+                .japanese: "年"
+            ],
+            "value": [
+                .spanish: "Valor",
+                .english: "Value",
+                .french: "Valeur",
+                .portuguese: "Valor",
+                .german: "Wert",
+                .italian: "Valore",
+                .chinese: "价值",
+                .japanese: "価値"
+            ],
+            "information": [
+                .spanish: "Información",
+                .english: "Information",
+                .french: "Information",
+                .portuguese: "Informação",
+                .german: "Information",
+                .italian: "Informazione",
+                .chinese: "信息",
+                .japanese: "情報"
+            ],
+            "description": [
+                .spanish: "Descripción",
+                .english: "Description",
+                .french: "Description",
+                .portuguese: "Descrição",
+                .german: "Beschreibung",
+                .italian: "Descrizione",
+                .chinese: "描述",
+                .japanese: "説明"
+            ],
+            "details": [
+                .spanish: "Detalles",
+                .english: "Details",
+                .french: "Détails",
+                .portuguese: "Detalhes",
+                .german: "Details",
+                .italian: "Dettagli",
+                .chinese: "详情",
+                .japanese: "詳細"
+            ],
+            "nominal_value": [
+                .spanish: "Valor nominal",
+                .english: "Nominal value",
+                .french: "Valeur nominale",
+                .portuguese: "Valor nominal",
+                .german: "Nennwert",
+                .italian: "Valore nominale",
+                .chinese: "面值",
+                .japanese: "額面価値"
+            ],
+            "period": [
+                .spanish: "Período",
+                .english: "Period",
+                .french: "Période",
+                .portuguese: "Período",
+                .german: "Zeitraum",
+                .italian: "Periodo",
+                .chinese: "时期",
+                .japanese: "期間"
+            ],
+            "issuing_country": [
+                .spanish: "País emisor",
+                .english: "Issuing country",
+                .french: "Pays émetteur",
+                .portuguese: "País emissor",
+                .german: "Ausstellendes Land",
+                .italian: "Paese emittente",
+                .chinese: "发行国",
+                .japanese: "発行国"
+            ],
+            "type": [
+                .spanish: "Tipo",
+                .english: "Type",
+                .french: "Type",
+                .portuguese: "Tipo",
+                .german: "Typ",
+                .italian: "Tipo",
+                .chinese: "类型",
+                .japanese: "タイプ"
+            ],
+            "coin": [
+                .spanish: "Moneda",
+                .english: "Coin",
+                .french: "Pièce",
+                .portuguese: "Moeda",
+                .german: "Münze",
+                .italian: "Moneta",
+                .chinese: "硬币",
+                .japanese: "硬貨"
+            ],
+            "bill": [
+                .spanish: "Billete",
+                .english: "Bill",
+                .french: "Billet",
+                .portuguese: "Nota",
+                .german: "Banknote",
+                .italian: "Banconota",
+                .chinese: "纸币",
+                .japanese: "紙幣"
+            ],
+            // MARK: - MexCurrenciesListView
+            "coins_and_bills": [
+                .spanish: "Monedas y Billetes",
+                .english: "Coins and Bills",
+                .french: "Pièces et Billets",
+                .portuguese: "Moedas e Notas",
+                .german: "Münzen und Scheine",
+                .italian: "Monete e Banconote",
+                .chinese: "硬币和纸币",
+                .japanese: "コインと紙幣"
+            ],
+            "search_coin_or_bill": [
+                .spanish: "Buscar moneda o billete",
+                .english: "Search coin or bill",
+                .french: "Rechercher pièce ou billet",
+                .portuguese: "Buscar moeda ou nota",
+                .german: "Münze oder Schein suchen",
+                .italian: "Cerca moneta o banconota",
+                .chinese: "搜索硬币或纸币",
+                .japanese: "コインまたは紙幣を検索"
+            ],
+            "search_any_currency": [
+                .spanish: "Busca cualquier moneda de México en circulación actualmente",
+                .english: "Search any currency of Mexico currently in circulation",
+                .french: "Recherchez n'importe quelle devise du Mexique actuellement en circulation",
+                .portuguese: "Procure qualquer moeda do México atualmente em circulação",
+                .german: "Suchen Sie eine beliebige Währung Mexikos, die derzeit im Umlauf ist",
+                .italian: "Cerca qualsiasi valuta del Messico attualmente in circolazione",
+                .chinese: "搜索墨西哥目前流通的任何货币",
+                .japanese: "メキシコで現在流通している通貨を検索"
+            ],
+            "no_results_found": [
+                .spanish: "No se encontraron resultados",
+                .english: "No results found",
+                .french: "Aucun résultat trouvé",
+                .portuguese: "Nenhum resultado encontrado",
+                .german: "Keine Ergebnisse gefunden",
+                .italian: "Nessun risultato trovato",
+                .chinese: "未找到结果",
+                .japanese: "結果が見つかりません"
+            ],
+            "try_another_search": [
+                .spanish: "Intenta con otro término de búsqueda",
+                .english: "Try another search term",
+                .french: "Essayez un autre terme de recherche",
+                .portuguese: "Tente outro termo de pesquisa",
+                .german: "Versuchen Sie einen anderen Suchbegriff",
+                .italian: "Prova un altro termine di ricerca",
+                .chinese: "尝试其他搜索词",
+                .japanese: "別の検索語を試してください"
+            ],
+            "mexican_coin_cents": [
+                .spanish: "Moneda de {value} centavos mexicanos",
+                .english: "{value} cents Mexican coin",
+                .french: "Pièce de {value} centimes mexicains",
+                .portuguese: "Moeda de {value} centavos mexicanos",
+                .german: "{value} Centavos mexikanische Münze",
+                .italian: "Moneta da {value} centesimi messicani",
+                .chinese: "{value}分墨西哥硬币",
+                .japanese: "メキシコ{value}センタボス硬貨"
+            ],
+            "mexican_coin_peso": [
+                .spanish: "Moneda de {value} peso mexicano",
+                .english: "{value} peso Mexican coin",
+                .french: "Pièce de {value} peso mexicain",
+                .portuguese: "Moeda de {value} peso mexicano",
+                .german: "{value} Peso mexikanische Münze",
+                .italian: "Moneta da {value} peso messicano",
+                .chinese: "{value}比索墨西哥硬币",
+                .japanese: "メキシコ{value}ペソ硬貨"
+            ],
+            "mexican_coin_pesos": [
+                .spanish: "Moneda de {value} pesos mexicanos",
+                .english: "{value} pesos Mexican coin",
+                .french: "Pièce de {value} pesos mexicains",
+                .portuguese: "Moeda de {value} pesos mexicanos",
+                .german: "{value} Pesos mexikanische Münze",
+                .italian: "Moneta da {value} pesos messicani",
+                .chinese: "{value}比索墨西哥硬币",
+                .japanese: "メキシコ{value}ペソ硬貨"
+            ],
+            "mexican_bill": [
+                .spanish: "Billete de {value} pesos mexicanos",
+                .english: "{value} pesos Mexican bill",
+                .french: "Billet de {value} pesos mexicains",
+                .portuguese: "Nota de {value} pesos mexicanos",
+                .german: "{value} Pesos mexikanische Banknote",
+                .italian: "Banconota da {value} pesos messicani",
+                .chinese: "{value}比索墨西哥纸币",
+                .japanese: "メキシコ{value}ペソ紙幣"
+            ],
+            // MARK: - USA & Canada Currency Lists
+            "search_any_currency_usa": [
+                .spanish: "Busca cualquier moneda de Estados Unidos en circulación actualmente",
+                .english: "Search any currency of the United States currently in circulation",
+                .french: "Recherchez n'importe quelle devise des États-Unis actuellement en circulation",
+                .portuguese: "Procure qualquer moeda dos Estados Unidos atualmente em circulação",
+                .german: "Suchen Sie eine beliebige Währung der Vereinigten Staaten, die derzeit im Umlauf ist",
+                .italian: "Cerca qualsiasi valuta degli Stati Uniti attualmente in circolazione",
+                .chinese: "搜索美国目前流通的任何货币",
+                .japanese: "アメリカで現在流通している通貨を検索"
+            ],
+            "search_any_currency_canada": [
+                .spanish: "Busca cualquier moneda de Canadá en circulación actualmente",
+                .english: "Search any currency of Canada currently in circulation",
+                .french: "Recherchez n'importe quelle devise du Canada actuellement en circulation",
+                .portuguese: "Procure qualquer moeda do Canadá atualmente em circulação",
+                .german: "Suchen Sie eine beliebige Währung Kanadas, die derzeit im Umlauf ist",
+                .italian: "Cerca qualsiasi valuta del Canada attualmente in circolazione",
+                .chinese: "搜索加拿大目前流通的任何货币",
+                .japanese: "カナダで現在流通している通貨を検索"
+            ],
+            "coming_soon": [
+                .spanish: "Vista de Detalle - Próximamente",
+                .english: "Detail View - Coming Soon",
+                .french: "Vue détaillée - Prochainement",
+                .portuguese: "Vista de Detalhes - Em Breve",
+                .german: "Detailansicht - Demnächst",
+                .italian: "Vista Dettagli - Prossimamente",
+                .chinese: "详细视图 - 即将推出",
+                .japanese: "詳細ビュー - 近日公開"
+            ],
+            // Monedas USA
+            "usa_penny": [
+                .spanish: "Moneda de 1 centavo (Penny)",
+                .english: "1 cent coin (Penny)",
+                .french: "Pièce de 1 cent (Penny)",
+                .portuguese: "Moeda de 1 centavo (Penny)",
+                .german: "1-Cent-Münze (Penny)",
+                .italian: "Moneta da 1 centesimo (Penny)",
+                .chinese: "1分硬币 (Penny)",
+                .japanese: "1セント硬貨 (Penny)"
+            ],
+            "usa_nickel": [
+                .spanish: "Moneda de 5 centavos (Nickel)",
+                .english: "5 cents coin (Nickel)",
+                .french: "Pièce de 5 cents (Nickel)",
+                .portuguese: "Moeda de 5 centavos (Nickel)",
+                .german: "5-Cent-Münze (Nickel)",
+                .italian: "Moneta da 5 centesimi (Nickel)",
+                .chinese: "5分硬币 (Nickel)",
+                .japanese: "5セント硬貨 (Nickel)"
+            ],
+            "usa_dime": [
+                .spanish: "Moneda de 10 centavos (Dime)",
+                .english: "10 cents coin (Dime)",
+                .french: "Pièce de 10 cents (Dime)",
+                .portuguese: "Moeda de 10 centavos (Dime)",
+                .german: "10-Cent-Münze (Dime)",
+                .italian: "Moneta da 10 centesimi (Dime)",
+                .chinese: "10分硬币 (Dime)",
+                .japanese: "10セント硬貨 (Dime)"
+            ],
+            "usa_quarter": [
+                .spanish: "Moneda de 25 centavos (Quarter)",
+                .english: "25 cents coin (Quarter)",
+                .french: "Pièce de 25 cents (Quarter)",
+                .portuguese: "Moeda de 25 centavos (Quarter)",
+                .german: "25-Cent-Münze (Quarter)",
+                .italian: "Moneta da 25 centesimi (Quarter)",
+                .chinese: "25分硬币 (Quarter)",
+                .japanese: "25セント硬貨 (Quarter)"
+            ],
+            "usa_half_dollar": [
+                .spanish: "Moneda de 50 centavos (Half Dollar)",
+                .english: "50 cents coin (Half Dollar)",
+                .french: "Pièce de 50 cents (Half Dollar)",
+                .portuguese: "Moeda de 50 centavos (Half Dollar)",
+                .german: "50-Cent-Münze (Half Dollar)",
+                .italian: "Moneta da 50 centesimi (Half Dollar)",
+                .chinese: "50分硬币 (Half Dollar)",
+                .japanese: "50セント硬貨 (Half Dollar)"
+            ],
+            "usa_dollar_coin": [
+                .spanish: "Moneda de 1 dólar (Dollar Coin)",
+                .english: "1 dollar coin (Dollar Coin)",
+                .french: "Pièce de 1 dollar (Dollar Coin)",
+                .portuguese: "Moeda de 1 dólar (Dollar Coin)",
+                .german: "1-Dollar-Münze (Dollar Coin)",
+                .italian: "Moneta da 1 dollaro (Dollar Coin)",
+                .chinese: "1美元硬币 (Dollar Coin)",
+                .japanese: "1ドル硬貨 (Dollar Coin)"
+            ],
+            "usa_bill_1": [
+                .spanish: "Billete de 1 dólar",
+                .english: "1 dollar bill",
+                .french: "Billet de 1 dollar",
+                .portuguese: "Nota de 1 dólar",
+                .german: "1-Dollar-Schein",
+                .italian: "Banconota da 1 dollaro",
+                .chinese: "1美元纸币",
+                .japanese: "1ドル紙幣"
+            ],
+            "usa_bill_2": [
+                .spanish: "Billete de 2 dólares",
+                .english: "2 dollars bill",
+                .french: "Billet de 2 dollars",
+                .portuguese: "Nota de 2 dólares",
+                .german: "2-Dollar-Schein",
+                .italian: "Banconota da 2 dollari",
+                .chinese: "2美元纸币",
+                .japanese: "2ドル紙幣"
+            ],
+            "usa_bill_5": [
+                .spanish: "Billete de 5 dólares",
+                .english: "5 dollars bill",
+                .french: "Billet de 5 dollars",
+                .portuguese: "Nota de 5 dólares",
+                .german: "5-Dollar-Schein",
+                .italian: "Banconota da 5 dollari",
+                .chinese: "5美元纸币",
+                .japanese: "5ドル紙幣"
+            ],
+            "usa_bill_10": [
+                .spanish: "Billete de 10 dólares",
+                .english: "10 dollars bill",
+                .french: "Billet de 10 dollars",
+                .portuguese: "Nota de 10 dólares",
+                .german: "10-Dollar-Schein",
+                .italian: "Banconota da 10 dollari",
+                .chinese: "10美元纸币",
+                .japanese: "10ドル紙幣"
+            ],
+            "usa_bill_20": [
+                .spanish: "Billete de 20 dólares",
+                .english: "20 dollars bill",
+                .french: "Billet de 20 dollars",
+                .portuguese: "Nota de 20 dólares",
+                .german: "20-Dollar-Schein",
+                .italian: "Banconota da 20 dollari",
+                .chinese: "20美元纸币",
+                .japanese: "20ドル紙幣"
+            ],
+            "usa_bill_50": [
+                .spanish: "Billete de 50 dólares",
+                .english: "50 dollars bill",
+                .french: "Billet de 50 dollars",
+                .portuguese: "Nota de 50 dólares",
+                .german: "50-Dollar-Schein",
+                .italian: "Banconota da 50 dollari",
+                .chinese: "50美元纸币",
+                .japanese: "50ドル紙幣"
+            ],
+            "usa_bill_100": [
+                .spanish: "Billete de 100 dólares",
+                .english: "100 dollars bill",
+                .french: "Billet de 100 dollars",
+                .portuguese: "Nota de 100 dólares",
+                .german: "100-Dollar-Schein",
+                .italian: "Banconota da 100 dollari",
+                .chinese: "100美元纸币",
+                .japanese: "100ドル紙幣"
+            ],
+            // Monedas Canadá
+            "can_nickel": [
+                .spanish: "Moneda de 5 centavos (Nickel)",
+                .english: "5 cents coin (Nickel)",
+                .french: "Pièce de 5 cents (Nickel)",
+                .portuguese: "Moeda de 5 centavos (Nickel)",
+                .german: "5-Cent-Münze (Nickel)",
+                .italian: "Moneta da 5 centesimi (Nickel)",
+                .chinese: "5分硬币 (Nickel)",
+                .japanese: "5セント硬貨 (Nickel)"
+            ],
+            "can_dime": [
+                .spanish: "Moneda de 10 centavos (Dime)",
+                .english: "10 cents coin (Dime)",
+                .french: "Pièce de 10 cents (Dime)",
+                .portuguese: "Moeda de 10 centavos (Dime)",
+                .german: "10-Cent-Münze (Dime)",
+                .italian: "Moneta da 10 centesimi (Dime)",
+                .chinese: "10分硬币 (Dime)",
+                .japanese: "10セント硬貨 (Dime)"
+            ],
+            "can_quarter": [
+                .spanish: "Moneda de 25 centavos (Quarter)",
+                .english: "25 cents coin (Quarter)",
+                .french: "Pièce de 25 cents (Quarter)",
+                .portuguese: "Moeda de 25 centavos (Quarter)",
+                .german: "25-Cent-Münze (Quarter)",
+                .italian: "Moneta da 25 centesimi (Quarter)",
+                .chinese: "25分硬币 (Quarter)",
+                .japanese: "25セント硬貨 (Quarter)"
+            ],
+            "can_half_dollar": [
+                .spanish: "Moneda de 50 centavos (Half Dollar)",
+                .english: "50 cents coin (Half Dollar)",
+                .french: "Pièce de 50 cents (Half Dollar)",
+                .portuguese: "Moeda de 50 centavos (Half Dollar)",
+                .german: "50-Cent-Münze (Half Dollar)",
+                .italian: "Moneta da 50 centesimi (Half Dollar)",
+                .chinese: "50分硬币 (Half Dollar)",
+                .japanese: "50セント硬貨 (Half Dollar)"
+            ],
+            "can_loonie": [
+                .spanish: "Moneda de 1 dólar (Loonie)",
+                .english: "1 dollar coin (Loonie)",
+                .french: "Pièce de 1 dollar (Loonie)",
+                .portuguese: "Moeda de 1 dólar (Loonie)",
+                .german: "1-Dollar-Münze (Loonie)",
+                .italian: "Moneta da 1 dollaro (Loonie)",
+                .chinese: "1加元硬币 (Loonie)",
+                .japanese: "1ドル硬貨 (Loonie)"
+            ],
+            "can_toonie": [
+                .spanish: "Moneda de 2 dólares (Toonie)",
+                .english: "2 dollars coin (Toonie)",
+                .french: "Pièce de 2 dollars (Toonie)",
+                .portuguese: "Moeda de 2 dólares (Toonie)",
+                .german: "2-Dollar-Münze (Toonie)",
+                .italian: "Moneta da 2 dollari (Toonie)",
+                .chinese: "2加元硬币 (Toonie)",
+                .japanese: "2ドル硬貨 (Toonie)"
+            ],
+            "can_bill_5": [
+                .spanish: "Billete de 5 dólares",
+                .english: "5 dollars bill",
+                .french: "Billet de 5 dollars",
+                .portuguese: "Nota de 5 dólares",
+                .german: "5-Dollar-Schein",
+                .italian: "Banconota da 5 dollari",
+                .chinese: "5加元纸币",
+                .japanese: "5ドル紙幣"
+            ],
+            "can_bill_10": [
+                .spanish: "Billete de 10 dólares",
+                .english: "10 dollars bill",
+                .french: "Billet de 10 dollars",
+                .portuguese: "Nota de 10 dólares",
+                .german: "10-Dollar-Schein",
+                .italian: "Banconota da 10 dollari",
+                .chinese: "10加元纸币",
+                .japanese: "10ドル紙幣"
+            ],
+            "can_bill_20": [
+                .spanish: "Billete de 20 dólares",
+                .english: "20 dollars bill",
+                .french: "Billet de 20 dollars",
+                .portuguese: "Nota de 20 dólares",
+                .german: "20-Dollar-Schein",
+                .italian: "Banconota da 20 dollari",
+                .chinese: "20加元纸币",
+                .japanese: "20ドル紙幣"
+            ],
+            "can_bill_50": [
+                .spanish: "Billete de 50 dólares",
+                .english: "50 dollars bill",
+                .french: "Billet de 50 dollars",
+                .portuguese: "Nota de 50 dólares",
+                .german: "50-Dollar-Schein",
+                .italian: "Banconota da 50 dollari",
+                .chinese: "50加元纸币",
+                .japanese: "50ドル紙幣"
+            ],
+            "can_bill_100": [
+                .spanish: "Billete de 100 dólares",
+                .english: "100 dollars bill",
+                .french: "Billet de 100 dollars",
+                .portuguese: "Nota de 100 dólares",
+                .german: "100-Dollar-Schein",
+                .italian: "Banconota da 100 dollari",
+                .chinese: "100加元纸币",
+                .japanese: "100ドル紙幣"
+            ],
         ]
         
         return translations[key]?[language] ?? key

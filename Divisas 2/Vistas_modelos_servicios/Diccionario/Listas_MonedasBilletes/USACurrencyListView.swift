@@ -27,24 +27,26 @@ struct USACurrencyListView: View {
         }
     }
     
-    let currencyItems: [CurrencyItem] = [
-        // Monedas
-        CurrencyItem(type: .coin, value: "0.01", displayName: "Moneda de 1 centavo (Penny)", icon: "bitcoinsign.circle.fill"),
-        CurrencyItem(type: .coin, value: "0.05", displayName: "Moneda de 5 centavos (Nickel)", icon: "bitcoinsign.circle.fill"),
-        CurrencyItem(type: .coin, value: "0.10", displayName: "Moneda de 10 centavos (Dime)", icon: "bitcoinsign.circle.fill"),
-        CurrencyItem(type: .coin, value: "0.25", displayName: "Moneda de 25 centavos (Quarter)", icon: "bitcoinsign.circle.fill"),
-        CurrencyItem(type: .coin, value: "0.50", displayName: "Moneda de 50 centavos (Half Dollar)", icon: "bitcoinsign.circle.fill"),
-        CurrencyItem(type: .coin, value: "1", displayName: "Moneda de 1 dólar (Dollar Coin)", icon: "bitcoinsign.circle.fill"),
-        
-        // Billetes
-        CurrencyItem(type: .bill, value: "1", displayName: "Billete de 1 dólar", icon: "banknote.fill"),
-        CurrencyItem(type: .bill, value: "2", displayName: "Billete de 2 dólares", icon: "banknote.fill"),
-        CurrencyItem(type: .bill, value: "5", displayName: "Billete de 5 dólares", icon: "banknote.fill"),
-        CurrencyItem(type: .bill, value: "10", displayName: "Billete de 10 dólares", icon: "banknote.fill"),
-        CurrencyItem(type: .bill, value: "20", displayName: "Billete de 20 dólares", icon: "banknote.fill"),
-        CurrencyItem(type: .bill, value: "50", displayName: "Billete de 50 dólares", icon: "banknote.fill"),
-        CurrencyItem(type: .bill, value: "100", displayName: "Billete de 100 dólares", icon: "banknote.fill")
-    ]
+    var currencyItems: [CurrencyItem] {
+        [
+            // Monedas
+            CurrencyItem(type: .coin, value: "0.01", displayName: "usa_penny".localized(), icon: "bitcoinsign.circle.fill"),
+            CurrencyItem(type: .coin, value: "0.05", displayName: "usa_nickel".localized(), icon: "bitcoinsign.circle.fill"),
+            CurrencyItem(type: .coin, value: "0.10", displayName: "usa_dime".localized(), icon: "bitcoinsign.circle.fill"),
+            CurrencyItem(type: .coin, value: "0.25", displayName: "usa_quarter".localized(), icon: "bitcoinsign.circle.fill"),
+            CurrencyItem(type: .coin, value: "0.50", displayName: "usa_half_dollar".localized(), icon: "bitcoinsign.circle.fill"),
+            CurrencyItem(type: .coin, value: "1", displayName: "usa_dollar_coin".localized(), icon: "bitcoinsign.circle.fill"),
+            
+            // Billetes
+            CurrencyItem(type: .bill, value: "1", displayName: "usa_bill_1".localized(), icon: "banknote.fill"),
+            CurrencyItem(type: .bill, value: "2", displayName: "usa_bill_2".localized(), icon: "banknote.fill"),
+            CurrencyItem(type: .bill, value: "5", displayName: "usa_bill_5".localized(), icon: "banknote.fill"),
+            CurrencyItem(type: .bill, value: "10", displayName: "usa_bill_10".localized(), icon: "banknote.fill"),
+            CurrencyItem(type: .bill, value: "20", displayName: "usa_bill_20".localized(), icon: "banknote.fill"),
+            CurrencyItem(type: .bill, value: "50", displayName: "usa_bill_50".localized(), icon: "banknote.fill"),
+            CurrencyItem(type: .bill, value: "100", displayName: "usa_bill_100".localized(), icon: "banknote.fill")
+        ]
+    }
     
     var filteredItems: [CurrencyItem] {
         if searchText.isEmpty {
@@ -68,14 +70,18 @@ struct USACurrencyListView: View {
                     Button(action: {
                         dismiss()
                     }) {
-                        HStack(spacing: 4) {
+                        ZStack {
+                            Circle()
+                                .fill(.ultraThinMaterial)
+                                .overlay(Circle().strokeBorder(Color.appTextPrimary.opacity(0.1), lineWidth: 1))
+                            
                             Image(systemName: "chevron.left")
-                                .font(.system(size: 17, weight: .semibold))
-                            Text("Home")
-                                .font(.system(size: 17))
+                                .font(.system(size: 18, weight: .semibold))
+                                .foregroundColor(.appTextPrimary)
                         }
-                        .foregroundColor(.appTextPrimary)
+                        .frame(width: 44, height: 44)
                     }
+                    .buttonStyle(.plain)
                     
                     Spacer()
                 }
@@ -85,7 +91,7 @@ struct USACurrencyListView: View {
                 
                 // Título
                 HStack {
-                    Text("Monedas y Billetes")
+                    Text("coins_and_bills".localized())
                         .font(.system(size: 34, weight: .bold))
                         .foregroundColor(.appTextPrimary)
                     
@@ -100,7 +106,7 @@ struct USACurrencyListView: View {
                         .foregroundColor(.appTextSecondary)
                         .font(.system(size: 16))
                     
-                    TextField("Buscar moneda o billete", text: $searchText)
+                    TextField("search_coin_or_bill".localized(), text: $searchText)
                         .foregroundColor(.appTextPrimary)
                         .font(.system(size: 16))
                     
@@ -128,7 +134,7 @@ struct USACurrencyListView: View {
                 
                 // Subtexto
                 HStack {
-                    Text("Busca cualquier moneda de Estados Unidos en circulación actualmente")
+                    Text("search_any_currency_usa".localized())
                         .font(.system(size: 14))
                         .foregroundColor(.appTextSecondary)
                     
@@ -153,11 +159,11 @@ struct USACurrencyListView: View {
                                     .font(.system(size: 48))
                                     .foregroundColor(.appTextSecondary)
                                 
-                                Text("No se encontraron resultados")
+                                Text("no_results_found".localized())
                                     .font(.system(size: 18, weight: .semibold))
                                     .foregroundColor(.appTextPrimary)
                                 
-                                Text("Intenta con otro término de búsqueda")
+                                Text("try_another_search".localized())
                                     .font(.system(size: 14))
                                     .foregroundColor(.appTextSecondary)
                             }
@@ -202,7 +208,7 @@ private struct CurrencyItemCard: View {
                     .font(.system(size: 17, weight: .semibold))
                     .foregroundColor(.appTextPrimary)
                 
-                Text(item.type == .coin ? "Moneda" : "Billete")
+                Text(item.type == .coin ? "coin".localized() : "bill".localized())
                     .font(.system(size: 14))
                     .foregroundColor(.appTextSecondary)
             }
@@ -210,7 +216,7 @@ private struct CurrencyItemCard: View {
             Spacer()
             
             // Valor
-            Text("$\(item.value)")
+            Text("coming_soon".localized())
                 .font(.system(size: 16, weight: .bold))
                 .foregroundColor(accentColor)
             

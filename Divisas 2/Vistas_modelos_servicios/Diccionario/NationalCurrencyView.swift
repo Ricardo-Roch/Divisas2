@@ -19,9 +19,8 @@ struct DictionaryView: View {
     
     private let headerHeightRatio: CGFloat = 0.33
     private let headerImageName = "DineroCanUsaMex"
-    private let titleText = "Divisas Nacional"
-    private let subtitleText = "Elige la moneda de tu preferencia que desees conocer"
-    
+    private var titleText: String {"national_currencies".localized()}
+    private var subtitleText: String {"choose_currency".localized()}
     struct Currency: Identifiable {
         let id = UUID()
         let flag: String
@@ -38,7 +37,7 @@ struct DictionaryView: View {
             flag: "🇲🇽",
             name: "Mexico",
             currencyCode: "MXN",
-            currencyName: "Peso Mexicano",
+            currencyName: "mexican_peso".localized(),
             billsCount: 7,
             coinsCount: 5,
             accentColor: Color(hex: "9CA462")
@@ -47,7 +46,7 @@ struct DictionaryView: View {
             flag: "🇺🇸",
             name: "Estados Unidos",
             currencyCode: "USD",
-            currencyName: "Dólar Estadounidense",
+            currencyName: "us_dollar".localized(),
             billsCount: 7,
             coinsCount: 6,
             accentColor: Color(hex: "4275B6")
@@ -56,7 +55,7 @@ struct DictionaryView: View {
             flag: "🇨🇦",
             name: "Canadá",
             currencyCode: "CAD",
-            currencyName: "Dólar Canadiense",
+            currencyName: "canadian_dollar".localized(),
             billsCount: 7,
             coinsCount: 6,
             accentColor: Color(hex: "FACB49")
@@ -101,18 +100,19 @@ struct DictionaryView: View {
                             Button(action: {
                                 dismiss()
                             }) {
-                                HStack(spacing: 4) {
+                                ZStack {
+                                    Circle()
+                                        .fill(Color.black.opacity(0.3))
+                                        .frame(width: 40, height: 40)
+                                    
                                     Image(systemName: "chevron.left")
-                                        .font(.system(size: 17, weight: .semibold))
-                                    Text("Home")
-                                        .font(.system(size: 17))
+                                        .font(.system(size: 18, weight: .semibold))
+                                        .foregroundColor(.white)
                                 }
-                                .foregroundColor(.white)
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 8)
                             }
-                            .padding(.top, 50)
                             .padding(.leading, 4)
+                            .padding(.top, 50)  // ⬅️ AGREGA ESTA LÍNEA
+
                             
                             Spacer()
                             

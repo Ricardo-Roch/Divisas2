@@ -116,7 +116,7 @@ struct MexicanCoinDetailView: View {
                     // Sección de Características
                     VStack(alignment: .leading, spacing: 16) {
                         HStack {
-                            Text("Características")
+                            Text("characteristics".localized())
                                 .font(.system(size: 24, weight: .bold))
                                 .foregroundColor(.appTextPrimary)
                             
@@ -141,14 +141,14 @@ struct MexicanCoinDetailView: View {
                         // Emisor
                         CharacteristicRow(
                             icon: "mappin.and.ellipse",
-                            title: "Emisor",
+                            title: "issuer".localized(),
                             value: "México"
                         )
                         
                         // Años
                         CharacteristicRow(
                             icon: "calendar",
-                            title: "Años",
+                            title: "years".localized(),
                             value: coinInfo.years
                         )
                         
@@ -159,7 +159,7 @@ struct MexicanCoinDetailView: View {
                                 .foregroundColor(Color(hex: "9CA462"))
                                 .frame(width: 28)
                             
-                            Text("Valor")
+                            Text("value".localized())
                                 .font(.system(size: 16, weight: .medium))
                                 .foregroundColor(.appTextPrimary)
                             
@@ -301,7 +301,7 @@ private struct CoinInfoPopup: View {
                         
                         // Descripción
                         VStack(alignment: .leading, spacing: 12) {
-                            Text("Descripción")
+                            Text("description".localized())
                                 .font(.system(size: 18, weight: .semibold))
                                 .foregroundColor(.appTextPrimary)
                             
@@ -313,14 +313,14 @@ private struct CoinInfoPopup: View {
                         
                         // Detalles adicionales
                         VStack(alignment: .leading, spacing: 16) {
-                            Text("Detalles")
+                            Text("details".localized())
                                 .font(.system(size: 18, weight: .semibold))
                                 .foregroundColor(.appTextPrimary)
                             
-                            DetailRow(label: "Valor nominal", value: "$\(item.value) MXN")
-                            DetailRow(label: "Período", value: info.years)
-                            DetailRow(label: "País emisor", value: "México 🇲🇽")
-                            DetailRow(label: "Tipo", value: item.type == .coin ? "Moneda" : "Billete")
+                            DetailRow(label: "nominal_value".localized(), value: "$\(item.value) MXN")
+                            DetailRow(label: "period".localized(), value: info.years)
+                            DetailRow(label: "issuing_country".localized(), value: "México 🇲🇽")
+                            DetailRow(label: "type".localized(), value: item.type == .coin ? "coin".localized() : "bill".localized())
                         }
                         .padding(16)
                         .background(
@@ -331,11 +331,11 @@ private struct CoinInfoPopup: View {
                     .padding(20)
                 }
             }
-            .navigationTitle("Información")
+            .navigationTitle("information".localized())
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Cerrar") {
+                    Button("close".localized()) {
                         dismiss()
                     }
                     .foregroundColor(.appTextPrimary)
