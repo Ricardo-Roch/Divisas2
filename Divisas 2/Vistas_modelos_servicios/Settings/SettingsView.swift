@@ -269,7 +269,7 @@ struct SettingsView: View {
         if enabled {
             requestNotificationPermission()
         } else {
-            cancelAllNotifications()
+            NotificationManager.shared.cancelAllNotifications()
         }
     }
     
@@ -278,7 +278,7 @@ struct SettingsView: View {
             DispatchQueue.main.async {
                 if granted {
                     fetchCurrentRate()
-                    scheduleHourlyNotifications()
+                    NotificationManager.shared.scheduleHourlyNotifications()
                 } else {
                     notificationsEnabled = false
                     notificationPermissionDenied = true
@@ -318,89 +318,6 @@ struct SettingsView: View {
             }
         }.resume()
     }
-    
-    private func scheduleHourlyNotifications() {
-        let center = UNUserNotificationCenter.current()
-        center.removeAllPendingNotificationRequests()
-        
-        let content = UNMutableNotificationContent()
-        content.title = "Tipo de Cambio USD/MXN"
-        content.sound = .default
-        
-        var dateComponents = DateComponents()
-        dateComponents.minute = 0
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
-        
-        let request = UNNotificationRequest(
-            identifier: "hourly-exchange-rate",
-            content: content,
-            trigger: trigger
-        )
-        
-        center.add(request) { error in
-            if let error = error {
-                print("Error scheduling notification: \(error)")
-            }
-        }
-        
-        scheduleImmediateRateCheck()
-    }
-    
-    private func scheduleImmediateRateCheck() {
-        Timer.scheduledTimer(withTimeInterval: 3600, repeats: true) { _ in
-            checkRateAndNotify()
-        }
-    }
-    
-    private func checkRateAndNotify() {
-        let urlString = "https://api.frankfurter.app/latest?from=USD&to=MXN"
-        guard let url = URL(string: urlString) else { return }
-        
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            guard let data = data, error == nil else { return }
-            
-            do {
-                let result = try JSONDecoder().decode(FrankfurterLatestResponse.self, from: data)
-                if let rate = result.rates["MXN"] {
-                    DispatchQueue.main.async {
-                        sendNotification(for: rate)
-                        lastKnownRate = rate
-                    }
-                }
-            } catch {
-                print("Error checking rate: \(error)")
-            }
-        }.resume()
-    }
-    
-    private func sendNotification(for rate: Double) {
-        let content = UNMutableNotificationContent()
-        content.title = "Tipo de Cambio USD/MXN"
-        content.body = "1 USD = $\(String(format: "%.2f", rate)) MXN"
-        content.sound = .default
-        
-        if lastKnownRate > 0 {
-            let percentChange = ((rate - lastKnownRate) / lastKnownRate) * 100
-            
-            if abs(percentChange) >= 1.0 {
-                let direction = percentChange > 0 ? "📈 Subió" : "📉 Bajó"
-                content.subtitle = "\(direction) \(String(format: "%.2f", abs(percentChange)))%"
-            }
-        }
-        
-        let request = UNNotificationRequest(
-            identifier: UUID().uuidString,
-            content: content,
-            trigger: nil
-        )
-        
-        UNUserNotificationCenter.current().add(request)
-    }
-    
-    private func cancelAllNotifications() {
-        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-        UNUserNotificationCenter.current().removeAllDeliveredNotifications()
-    }
 }
 
 // MARK: - Language Picker View
@@ -420,7 +337,6 @@ struct LanguagePickerView: View {
                         withAnimation {
                             selectedLanguage = language
                         }
-                        // Pequeño delay para que el usuario vea la selección
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                             dismiss()
                         }

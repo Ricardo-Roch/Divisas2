@@ -5,7 +5,6 @@
 //  Created by Ricardo Rocha Moreno on 15/10/25.
 //
 
-
 import SwiftUI
 
 @main
@@ -16,7 +15,8 @@ struct Divisas_2: App {
 
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            // Mostrar splash siempre que abra la app
+            SplashView()
                 .preferredColorScheme(appColorScheme.colorScheme)
         }
     }

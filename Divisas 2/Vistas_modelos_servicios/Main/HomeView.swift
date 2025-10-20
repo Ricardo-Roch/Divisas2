@@ -83,21 +83,22 @@ struct HomeView: View {
         }
     }
     
-    // Layout vertical (portrait)
+    // Layout vertical (portrait) - MEJORADO
     private func portraitLayout() -> some View {
         VStack(spacing: 16) {
             // Escáner
             NavigationLink(value: Route.identifier) {
-                 ModuleCard(
-                     title: "scanner_title".localized(),
-                     subtitle: "scanner_subtitle".localized(),
-                     icon: "camera.fill",
-                     accentColor: Color(red: 0.95, green: 0.35, blue: 0.35),
-                     cta: "scanner_cta".localized(),
-                     minHeight: 140
-                 )
-             }
-             .buttonStyle(.plain)
+                ModuleCard(
+                    title: "scanner_title".localized(),
+                    subtitle: "scanner_subtitle".localized(),
+                    icon: "camera.fill",
+                    accentColor: Color(red: 0.95, green: 0.35, blue: 0.35),
+                    cta: "scanner_cta".localized(),
+                    minHeight: 140
+                )
+            }
+            .buttonStyle(.plain)
+            .frame(maxHeight: .infinity) // ← AGREGAR
             
             // Grid 2x2
             HStack(spacing: 16) {
@@ -111,20 +112,21 @@ struct HomeView: View {
                     )
                 }
                 .buttonStyle(.plain)
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity, maxHeight: .infinity) // ← AGREGAR maxHeight
                 
                 NavigationLink(value: Route.markets) {
-                       ModuleCard(
-                           title: "exchange_money".localized(),
-                           subtitle: "nearby_locations".localized(),
-                           icon: "map.fill",
-                           accentColor: Color(red: 1.0, green: 0.85, blue: 0.15),
-                           minHeight: 140
-                       )
-                   }
-                   .buttonStyle(.plain)
-                   .frame(maxWidth: .infinity)
+                    ModuleCard(
+                        title: "exchange_money".localized(),
+                        subtitle: "nearby_locations".localized(),
+                        icon: "map.fill",
+                        accentColor: Color(red: 1.0, green: 0.85, blue: 0.15),
+                        minHeight: 140
+                    )
+                }
+                .buttonStyle(.plain)
+                .frame(maxWidth: .infinity, maxHeight: .infinity) // ← AGREGAR maxHeight
             }
+            .frame(maxHeight: .infinity) // ← AGREGAR
             
             // Conversor
             NavigationLink(value: Route.calculator) {
@@ -137,13 +139,80 @@ struct HomeView: View {
                 )
             }
             .buttonStyle(.plain)
-            
-            Spacer(minLength: 0)
+            .frame(maxHeight: .infinity) // ← AGREGAR
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
     }
     
+    // ALTERNATIVA: Si quieres controlar proporciones específicas
+    private func portraitLayoutWithProportions() -> some View {
+        GeometryReader { geometry in
+            let availableHeight = geometry.size.height
+            let spacing: CGFloat = 16
+            let totalSpacing = spacing * 3 // 3 espacios entre 4 elementos
+            let usableHeight = availableHeight - totalSpacing
+            
+            VStack(spacing: spacing) {
+                // Escáner - 25% de altura
+                NavigationLink(value: Route.identifier) {
+                    ModuleCard(
+                        title: "scanner_title".localized(),
+                        subtitle: "scanner_subtitle".localized(),
+                        icon: "camera.fill",
+                        accentColor: Color(red: 0.95, green: 0.35, blue: 0.35),
+                        cta: "scanner_cta".localized(),
+                        minHeight: 140
+                    )
+                }
+                .buttonStyle(.plain)
+                .frame(height: usableHeight * 0.25)
+                
+                // Grid 2x2 - 30% de altura
+                HStack(spacing: spacing) {
+                    NavigationLink(value: Route.nationalCurrency) {
+                        ModuleCard(
+                            title: "national_currency".localized(),
+                            subtitle: "know_currencies".localized(),
+                            icon: "banknote.fill",
+                            accentColor: Color(red: 0.65, green: 0.75, blue: 0.35),
+                            minHeight: 140
+                        )
+                    }
+                    .buttonStyle(.plain)
+                    .frame(maxWidth: .infinity)
+                    
+                    NavigationLink(value: Route.markets) {
+                        ModuleCard(
+                            title: "exchange_money".localized(),
+                            subtitle: "nearby_locations".localized(),
+                            icon: "map.fill",
+                            accentColor: Color(red: 1.0, green: 0.85, blue: 0.15),
+                            minHeight: 140
+                        )
+                    }
+                    .buttonStyle(.plain)
+                    .frame(maxWidth: .infinity)
+                }
+                .frame(height: usableHeight * 0.30)
+                
+                // Conversor - 45% de altura
+                NavigationLink(value: Route.calculator) {
+                    ConverterCard(
+                        title: "converter".localized(),
+                        subtitle: "between_currencies".localized(),
+                        icon: "dollarsign.circle.fill",
+                        accentColor: Color(red: 0.3, green: 0.55, blue: 0.85),
+                        minHeight: 160
+                    )
+                }
+                .buttonStyle(.plain)
+                .frame(height: usableHeight * 0.45)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+        }
+    }
     // Layout horizontal (landscape)
     private func landscapeLayout() -> some View {
         HStack(spacing: 16) {

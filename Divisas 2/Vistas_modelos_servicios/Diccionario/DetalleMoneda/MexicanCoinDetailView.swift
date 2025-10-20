@@ -21,39 +21,70 @@ struct MexicanCoinDetailView: View {
     
     // Configuración de imágenes por denominación
     var coinImages: [String] {
-        switch item.value {
-        case "0.10":
-            return ["MX_10C_frente", "MX_10C_reverso", "MX_10C_lateral1", "MX_10C_lateral2"]
-        case "0.20":
-            return ["MX_20C_frente", "MX_20C_reverso", "MX_20C_lateral1", "MX_20C_lateral2"]
-        case "0.50":
-            return ["MX_50C_frente", "MX_50C_reverso", "MX_50C_lateral1", "MX_50C_lateral2"]
-        case "1":
-            return ["MX_1P_frente", "MX_1P_reverso", "MX_1P_lateral1", "MX_1P_lateral2"]
-        case "2":
-            return ["MX_2P_frente", "MX_2P_reverso", "MX_2P_lateral1", "MX_2P_lateral2"]
-        case "5":
-            return ["MX_5P_frente", "MX_5P_reverso", "MX_5P_lateral1", "MX_5P_lateral2"]
-        case "10":
-            return ["MX_10P_frente", "MX_10P_reverso", "MX_10P_lateral1", "MX_10P_lateral2"]
-        case "20":
-            return ["MX_20P_frente", "MX_20P_reverso", "MX_20P_lateral1", "MX_20P_lateral2"]
-        default:
-            return ["placeholder_frente", "placeholder_reverso", "placeholder_lateral1", "placeholder_lateral2"]
+        if item.type == .bill {
+            switch item.value {
+            case "20":
+                return ["MX_20B_frente", "MX_20B_reverso", "MX_20BV_reverso", "MX_20BV_reverso"]
+            case "50":
+                return ["MX_50B_frente", "MX_50B_reverso", "MX_50BV_reverso", "MX_50BV_reverso"]
+            case "100":
+                return ["MX_100B_frente", "MX_100B_reverso", "MX_100BV_reverso", "MX_100BV_reverso"]
+            case "200":
+                return ["MX_200B_frente", "MX_200B_reverso", "MX_200BV_reverso", "MX_200BV_reverso"]
+            case "500":
+                return ["MX_500B_frente", "MX_500B_reverso", "MX_500BV_reverso", "MX_500BV_reverso"]
+            case "1000":
+                return ["MX_1000B_frente", "MX_1000B_reverso"]
+            default:
+                return ["placeholder_frente", "placeholder_reverso", "placeholder_lateral1", "placeholder_lateral2"]
+            }
+        } else {
+            switch item.value {
+            case "0.10":
+                return ["MX_10C_frente", "MX_10C_reverso"]
+            case "0.20":
+                return ["MX_20C_frente", "MX_20C_reverso"]
+            case "0.50":
+                return ["MX_50C_frente", "MX_50C_reverso"]
+            case "1":
+                return ["MX_1P_frente", "MX_1P_reverso"]
+            case "2":
+                return ["MX_2P_frente", "MX_2P_reverso"]
+            case "5":
+                return ["MX_5P_frente", "MX_5P_reverso"]
+            case "10":
+                return ["MX_10P_frente", "MX_10P_reverso"]
+            case "20":
+                return ["MX_20P_frente", "MX_20P_reverso"]
+            default:
+                return ["placeholder_frente", "placeholder_reverso", "placeholder_lateral1", "placeholder_lateral2"]
+            }
         }
     }
     
     var coinInfo: CoinInfo {
-        switch item.value {
-        case "0.10": return CoinInfo(years: "2009-2019", description: "Moneda de 10 centavos fabricada en acero inoxidable. Presenta el Escudo Nacional en el anverso.")
-        case "0.20": return CoinInfo(years: "2009-2019", description: "Moneda de 20 centavos con diseño moderno y material resistente.")
-        case "0.50": return CoinInfo(years: "1992-presente", description: "Moneda de 50 centavos con centro de bronce-aluminio y anillo de acero inoxidable.")
-        case "1": return CoinInfo(years: "1996-presente", description: "Moneda de 1 peso bimetálica, con núcleo de bronce-aluminio y anillo de acero inoxidable.")
-        case "2": return CoinInfo(years: "1996-presente", description: "Moneda de 2 pesos bimetálica con diseño distintivo del Escudo Nacional.")
-        case "5": return CoinInfo(years: "1997-presente", description: "Moneda de 5 pesos bimetálica, una de las más usadas en circulación.")
-        case "10": return CoinInfo(years: "1997-presente", description: "Moneda de 10 pesos bimetálica con centro de bronce-aluminio.")
-        case "20": return CoinInfo(years: "1993-presente", description: "Moneda conmemorativa de 20 pesos con diversos diseños según el año de emisión.")
-        default: return CoinInfo(years: "N/A", description: "Información no disponible.")
+        if item.type == .bill {
+            switch item.value {
+            case "20": return CoinInfo(years: "2018-presente", description: "Billete de $20 pesos conmemorativo y polímero (serie actual).")
+            case "50": return CoinInfo(years: "2021-presente", description: "Billete de $50 pesos de la familia G con motivos axolote y Xochimilco.")
+            case "100": return CoinInfo(years: "2020-presente", description: "Billete de $100 pesos de la familia G con Sor Juana Inés de la Cruz.")
+            case "200": return CoinInfo(years: "2019-presente", description: "Billete de $200 pesos de la familia G con Hidalgo y Morelos.")
+            case "500": return CoinInfo(years: "2018-presente", description: "Billete de $500 pesos de la familia G con Benito Juárez.")
+            case "1000": return CoinInfo(years: "2020-presente", description: "Billete de $1000 pesos de la familia G con la Revolución Mexicana.")
+            default: return CoinInfo(years: "N/A", description: "Información no disponible.")
+            }
+        } else {
+            switch item.value {
+            case "0.10": return CoinInfo(years: "2009-2019", description: "Moneda de 10 centavos fabricada en acero inoxidable. Presenta el Escudo Nacional en el anverso.")
+            case "0.20": return CoinInfo(years: "2009-2019", description: "Moneda de 20 centavos con diseño moderno y material resistente.")
+            case "0.50": return CoinInfo(years: "1992-presente", description: "Moneda de 50 centavos con centro de bronce-aluminio y anillo de acero inoxidable.")
+            case "1": return CoinInfo(years: "1996-presente", description: "Moneda de 1 peso bimetálica, con núcleo de bronce-aluminio y anillo de acero inoxidable.")
+            case "2": return CoinInfo(years: "1996-presente", description: "Moneda de 2 pesos bimetálica con diseño distintivo del Escudo Nacional.")
+            case "5": return CoinInfo(years: "1997-presente", description: "Moneda de 5 pesos bimetálica, una de las más usadas en circulación.")
+            case "10": return CoinInfo(years: "1997-presente", description: "Moneda de 10 pesos bimetálica con centro de bronce-aluminio.")
+            case "20": return CoinInfo(years: "1993-presente", description: "Moneda conmemorativa de 20 pesos con diversos diseños según el año de emisión.")
+            default: return CoinInfo(years: "N/A", description: "Información no disponible.")
+            }
         }
     }
     
